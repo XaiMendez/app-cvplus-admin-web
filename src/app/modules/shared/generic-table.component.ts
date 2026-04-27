@@ -78,7 +78,7 @@ export class GenericTableComponent implements OnChanges {
     return row?.memberships?.length ?? 0;
   }
 
-  getSeverity(value?: string): 'success' | 'danger' | 'warn' | 'info' | undefined {
+  getSeverity(value?: string): 'success' | 'danger' | 'warning' | 'info' | undefined {
     if (!value) return undefined;
 
     const v = value.toUpperCase();
@@ -92,7 +92,7 @@ export class GenericTableComponent implements OnChanges {
     }
 
     if (['PENDIENTE', 'EN PROGRESO', 'PROCESANDO'].includes(v)) {
-      return 'warn';
+      return 'warning';
     }
 
     return 'info';

@@ -191,10 +191,10 @@ export class LoyaltyAccountsListComponent implements OnInit {
     this.router.navigate(['/loyalty/transactions', account.customer_id]);
   }
 
-  getStatusSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' {
-    const severityMap: Record<string, 'success' | 'warn' | 'danger' | 'info'> = {
+  getStatusSeverity(status: string): 'success' | 'warning' | 'danger' | 'info' {
+    const severityMap: Record<string, 'success' | 'warning' | 'danger' | 'info'> = {
       'ACTIVE': 'success',
-      'INACTIVE': 'warn',
+      'INACTIVE': 'warning',
       'SUSPENDED': 'danger'
     };
     return severityMap[status] || 'info';

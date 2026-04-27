@@ -183,10 +183,10 @@ export class LoyaltyTransactionsComponent implements OnInit {
     });
   }
 
-  getTransactionSeverity(type: string): 'success' | 'warn' | 'danger' | 'info' {
-    const severityMap: Record<string, 'success' | 'warn' | 'danger' | 'info'> = {
+  getTransactionSeverity(type: string): 'success' | 'warning' | 'danger' | 'info' {
+    const severityMap: Record<string, 'success' | 'warning' | 'danger' | 'info'> = {
       'ACCUMULATION': 'success',
-      'REDEMPTION': 'warn',
+      'REDEMPTION': 'warning',
       'EXPIRATION': 'danger',
       'REVERSAL': 'info'
     };

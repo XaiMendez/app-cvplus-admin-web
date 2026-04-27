@@ -15,13 +15,13 @@ FROM caddy:2-alpine
 
 WORKDIR /usr/share/caddy
 
-COPY --from=builder /app/dist/cvplus-landing .
+# Copy built Angular app from browser folder
+COPY --from=builder /app/dist/cvplus-landing/browser .
 
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN chmod +x /usr/local/bin/entrypoint.sh && \
-    ls -la /usr/share/caddy
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
 

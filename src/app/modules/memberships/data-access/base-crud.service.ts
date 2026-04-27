@@ -40,8 +40,8 @@ export abstract class BaseCrudService<T> {
     );
   }
 
-  private handleError(error: HttpErrorResponse) {
+  private handleError = (error: HttpErrorResponse) => {
     console.error('Error:', error);
     return throwError(() => error);
-  }
+  };
 }

@@ -42,8 +42,8 @@ export abstract class BaseCrudService<T> {
     );
   }
 
-  protected handleError(error: any) {
+  protected handleError = (error: any) => {
     console.error('Error en la API:', error);
     return throwError(() => new Error(error?.error?.message || 'Error desconocido'));
-  }
+  };
 }

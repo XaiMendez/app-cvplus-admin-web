@@ -18,7 +18,7 @@
     [rows]="10"
     [rowsPerPageOptions]="[5,10,20]"
     [loading]="loading"
-    [globalFilterFields]="columns.map(c => c.key)"
+    [globalFilterFields]="getFilterFields()"
     class="p-datatable-striped p-datatable-sm">
 
     <!-- 🔍 BUSCADOR -->
@@ -103,7 +103,7 @@
     <!-- EMPTY -->
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td [attr.colspan]="columns.length + 1">
+        <td [attr.colspan]="getColspanValue()">
           No hay datos disponibles
         </td>
       </tr>

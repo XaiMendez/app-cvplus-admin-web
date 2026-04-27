@@ -1,0 +1,202 @@
+.membership-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0;
+  background: transparent;
+}
+
+.form-section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(30, 41, 59, 0.04);
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header {
+  background: #f3f4f6;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  margin: -1.5rem -1.5rem 1.25rem -1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  i {
+    font-size: 1.3rem;
+    color: #2563eb;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    letter-spacing: 0.01em;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem 1rem;
+}
+.col-12 {
+  grid-column: span 12;
+}
+.lg\:col-4 {
+  grid-column: span 12;
+  @media (min-width: 1024px) {
+    grid-column: span 4;
+  }
+}
+.lg\:col-6 {
+  grid-column: span 12;
+  @media (min-width: 1024px) {
+    grid-column: span 6;
+  }
+}
+.lg\:col-8 {
+  grid-column: span 12;
+  @media (min-width: 1024px) {
+    grid-column: span 8;
+  }
+}
+
+span.p-float-label {
+  width: 100%;
+}
+
+.error {
+  color: #ef4444;
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0;
+  background: transparent;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 2rem;
+}
+
+// PrimeNG Float Label Configuration
+:deep(.p-float-label) {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  > input,
+  > .p-dropdown,
+  > .p-calendar,
+  > .p-inputnumber {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    border-radius: 6px;
+    border: 1px solid #d1d5db !important;
+    background: #fff !important;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    order: 2;
+
+    &:hover:not(:disabled) {
+      border-color: #9ca3af !important;
+    }
+
+    &:focus {
+      border-color: #2563eb !important;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08) !important;
+    }
+
+    &.p-filled,
+    &.ng-filled {
+      border-color: #2563eb !important;
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: #ef4444 !important;
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.08) !important;
+      }
+    }
+
+    &:disabled {
+      background-color: #f9fafb !important;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+  }
+
+  > label {
+    position: absolute;
+    left: 0.75rem;
+    top: 0.75rem;
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 500;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: #fff;
+    padding: 0 0.25rem;
+    z-index: 2;
+    order: 1;
+  }
+
+  // Float label UP on focus or when has value
+  > input:focus ~ label,
+  > input:not([value=""]) ~ label,
+  > input[value]:not([value=""]) ~ label,
+  > .p-dropdown.ng-dirty ~ label,
+  > .p-dropdown.ng-touched ~ label,
+  > .p-calendar.ng-dirty ~ label,
+  > .p-calendar.ng-touched ~ label,
+  > .p-inputnumber.ng-dirty ~ label,
+  > .p-inputnumber.ng-touched ~ label,
+  > .p-dropdown:focus ~ label,
+  > .p-calendar:focus ~ label,
+  > .p-inputnumber:focus ~ label,
+  > .p-dropdown-filled ~ label,
+  > .p-calendar-filled ~ label,
+  > .p-inputnumber-filled ~ label {
+    top: -0.5rem;
+    left: 0.75rem;
+    font-size: 0.875rem;
+    color: #2563eb;
+    background: #fff;
+    z-index: 3;
+  }
+}
+
+// Component specific adjustments
+:deep(.p-dropdown) {
+  width: 100% !important;
+}
+
+:deep(.p-calendar) {
+  width: 100% !important;
+}
+
+:deep(.p-inputnumber) {
+  width: 100% !important;
+}

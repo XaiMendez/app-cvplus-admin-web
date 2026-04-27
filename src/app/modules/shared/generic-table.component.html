@@ -1,0 +1,114 @@
+<p-progressSpinner *ngIf="loading" strokeWidth="4" class="w-full mt-6"></p-progressSpinner>
+
+<p-card *ngIf="!loading && data.length === 0" class="w-full">
+  <ng-template pTemplate="header">
+    <div style="text-align: center; padding: 20px;">
+      <p style="color: #999;">No hay registros</p>
+    </div>
+  </ng-template>
+</p-card>
+
+<p-card *ngIf="!loading && data.length > 0" class="w-full">
+
+  <p-table
+    #dt
+    [value]="data"
+    [columns]="columns"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5,10,20]"
+    [loading]="loading"
+    [globalFilterFields]="columns.map(c => c.key)"
+    class="p-datatable-striped p-datatable-sm">
+
+    <!-- 🔍 BUSCADOR -->
+    <ng-template pTemplate="caption">
+      <div class="flex justify-content-end">
+        <span class="p-input-icon-left w-30rem">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Buscar..."
+            class="w-full" />
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- HEADER -->
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          {{ col.label }}
+        </th>
+        <th style="text-align:center;">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <!-- BODY -->
+    <ng-template pTemplate="body" let-row>
+      <tr>
+
+        <td *ngFor="let col of columns">
+          <ng-container [ngSwitch]="col.type || 'text'">
+
+            <!-- STATUS -->
+            <p-tag
+              *ngSwitchCase="'status'"
+              [value]="getValue(row, col.key) ?? ''"
+              [severity]="getSeverity(getValue(row, col.key)) ?? undefined">
+            </p-tag>
+
+            <!-- COUNT -->
+            <p-button
+              *ngSwitchCase="'count'"
+              icon="pi pi-external-link"
+              label="Membresías"
+              [badge]="(getMembershipsCount(row) | number) ?? '0'"
+              badgeClass="p-badge-contrast"
+              severity="secondary"
+              outlined="true"
+              (click)="onAction('view', row)">
+            </p-button>
+
+            <!-- DEFAULT -->
+            <span *ngSwitchDefault>
+              {{ getValue(row, col.key) ?? '-' }}
+            </span>
+
+          </ng-container>
+        </td>
+
+        <!-- ACTIONS -->
+        <td class="actions-cell">
+          <p-button
+            icon="pi pi-pencil"
+            text
+            severity="info"
+            (click)="onAction('edit', row)">
+          </p-button>
+
+          <p-button
+            icon="pi pi-trash"
+            text
+            severity="danger"
+            (click)="onAction('delete', row)">
+          </p-button>
+        </td>
+
+      </tr>
+    </ng-template>
+
+    <!-- EMPTY -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="columns.length + 1">
+          No hay datos disponibles
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+
+</p-card>

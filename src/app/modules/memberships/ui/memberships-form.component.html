@@ -1,0 +1,376 @@
+<form [formGroup]="form" *ngIf="!loading" class="membership-form">
+  
+  <!-- SECCIÓN 1: BÚSQUEDA Y DATOS DEL CLIE          <p-dropdown 
+            id="passType"
+            formControlName="passType"
+            [options]="passTypeOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            (onChange)="onPassTypeChange()"
+            [ngClass]="{ 'ng-filled': isFieldFilled('passType') }">  <div class="form-section">
+    <div class="section-header">
+      <i class="pi pi-user"></i>
+      <span class="section-title">Datos del Cliente</span>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 lg:col-8">
+        <span class="p-float-label">
+          <input 
+            pInputText 
+            id="dui" 
+            type="text" 
+            formControlName="dui"
+            placeholder=" "
+            style="width:100%">
+          <label for="dui">Número de DUI</label>
+        </span>
+      </div>
+      <div class="col-12 lg:col-4">
+        <button 
+          pButton 
+          type="button"
+          label="Buscar" 
+          icon="pi pi-search" 
+          severity="info"
+          [outlined]="true"
+          style="width:100%">
+        </button>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <input 
+            pInputText 
+            id="customerName" 
+            type="text" 
+            formControlName="customerName"
+            class="w-full"
+            required>
+          <label for="customerName">Nombre <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('customerName')?.hasError('required') && form.get('customerName')?.touched">
+          Requerido
+        </small>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <input 
+            pInputText 
+            id="customerEmail" 
+            type="email" 
+            formControlName="customerEmail"
+            class="w-full"
+            required>
+          <label for="customerEmail">Email <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('customerEmail')?.hasError('required') && form.get('customerEmail')?.touched">
+          Requerido
+        </small>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <input 
+            pInputText 
+            id="customerPhone" 
+            type="text" 
+            formControlName="customerPhone"
+            class="w-full"
+            required>
+          <label for="customerPhone">Teléfono <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('customerPhone')?.hasError('required') && form.get('customerPhone')?.touched">
+          Requerido
+        </small>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <p-dropdown 
+            id="customerStatus"
+            formControlName="customerStatus"
+            [options]="customerStatusOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            [ngClass]="{ 'ng-filled': isFieldFilled('customerStatus') }">
+          </p-dropdown>
+          <label for="customerStatus">Estado <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('customerStatus')?.hasError('required') && form.get('customerStatus')?.touched">
+          Requerido
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: TIPO DE PASE -->
+  <div class="form-section">
+    <div class="section-header">
+      <i class="pi pi-credit"></i>
+      <span class="section-title">Configuración del Pase</span>
+    </div>
+
+    <div class="grid">
+      <!-- Tipo de Pase -->
+      <div class="col-12">
+        <span class="p-float-label">
+          <p-dropdown 
+            id="passType"
+            formControlName="passType"
+            [options]="passTypeOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            (onChange)="onPassTypeChange()"
+            required>
+          </p-dropdown>
+          <label for="passType">Tipo de Pase <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('passType')?.hasError('required') && form.get('passType')?.touched">
+          Requerido
+        </small>
+      </div>
+
+      <!-- PASE CON TIER (Membresía Tradicional) -->
+      <ng-container *ngIf="form.get('passType')?.value === 'TIER'">
+        <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <p-dropdown 
+            id="program"
+            formControlName="program"
+            [options]="programs"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            [ngClass]="{ 'ng-filled': isFieldFilled('program') }">
+          </p-dropdown>
+          <label for="program">Programa <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('program')?.hasError('required') && form.get('program')?.touched">
+          Requerido
+        </small>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <p-dropdown 
+            id="tier"
+            formControlName="tier"
+            [options]="tiers"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            [ngClass]="{ 'ng-filled': isFieldFilled('tier') }">
+          </p-dropdown>
+          <label for="tier">Nivel <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('tier')?.hasError('required') && form.get('tier')?.touched">
+          Requerido
+        </small>
+      </div>
+
+      <div class="col-12">
+        <span class="p-float-label">
+          <p-calendar
+            id="expirationDate"
+            formControlName="expirationDate"
+            [showIcon]="true"
+            dateFormat="yy-mm-dd"
+            [showTime]="true"
+            hourFormat="24"
+            class="w-full"
+            [ngClass]="{ 'ng-filled': isFieldFilled('expirationDate') }">
+          </p-calendar>
+          <label for="expirationDate">Fecha de Expiración <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('expirationDate')?.hasError('required') && form.get('expirationDate')?.touched">
+          Requerido
+        </small>
+      </div>
+      </ng-container>
+
+      <!-- PASE CON LEALTAD (Programa de Puntos) -->
+      <ng-container *ngIf="form.get('passType')?.value === 'LOYALTY'">
+        <div class="col-12 lg:col-6">
+          <span class="p-float-label">
+            <p-inputNumber 
+              id="pointsPerDollar"
+              formControlName="pointsPerDollar"
+              [step]="0.1"
+              [min]="0"
+              placeholder=" "
+              [ngClass]="{ 'ng-filled': isFieldFilled('pointsPerDollar') }">
+            </p-inputNumber>
+            <label for="pointsPerDollar">Puntos por $1 <span class="text-red-500">*</span></label>
+          </span>
+          <small class="error" *ngIf="form.get('pointsPerDollar')?.hasError('required') && form.get('pointsPerDollar')?.touched">
+            Requerido
+          </small>
+        </div>
+
+        <div class="col-12 lg:col-6">
+          <span class="p-float-label">
+            <p-inputNumber 
+              id="maxPointsPerTransaction"
+              formControlName="maxPointsPerTransaction"
+              [step]="1"
+              [min]="0"
+              placeholder=" "
+              [ngClass]="{ 'ng-filled': isFieldFilled('maxPointsPerTransaction') }">
+            </p-inputNumber>
+            <label for="maxPointsPerTransaction">Máx. Puntos/Transacción <span class="text-red-500">*</span></label>
+          </span>
+          <small class="error" *ngIf="form.get('maxPointsPerTransaction')?.hasError('required') && form.get('maxPointsPerTransaction')?.touched">
+            Requerido
+          </small>
+        </div>
+
+        <div class="col-12 lg:col-6">
+          <span class="p-float-label">
+            <p-inputNumber 
+              id="maxPointsPerDay"
+              formControlName="maxPointsPerDay"
+              [step]="1"
+              [min]="0"
+              placeholder=" "
+              [ngClass]="{ 'ng-filled': isFieldFilled('maxPointsPerDay') }">
+            </p-inputNumber>
+            <label for="maxPointsPerDay">Máx. Puntos/Día <span class="text-red-500">*</span></label>
+          </span>
+          <small class="error" *ngIf="form.get('maxPointsPerDay')?.hasError('required') && form.get('maxPointsPerDay')?.touched">
+            Requerido
+          </small>
+        </div>
+
+        <div class="col-12 lg:col-6">
+          <span class="p-float-label">
+            <p-inputNumber 
+              id="redemptionRate"
+              formControlName="redemptionRate"
+              [step]="0.01"
+              [min]="0"
+              placeholder=" "
+              [ngClass]="{ 'ng-filled': isFieldFilled('redemptionRate') }">
+            </p-inputNumber>
+            <label for="redemptionRate">1 Punto = $ <span class="text-red-500">*</span></label>
+          </span>
+          <small class="error" *ngIf="form.get('redemptionRate')?.hasError('required') && form.get('redemptionRate')?.touched">
+            Requerido
+          </small>
+        </div>
+
+        <div class="col-12 lg:col-6">
+          <span class="p-float-label">
+            <p-inputNumber 
+              id="pointsValidity"
+              formControlName="pointsValidity"
+              [step]="1"
+              [min]="1"
+              placeholder=" "
+              [ngClass]="{ 'ng-filled': isFieldFilled('pointsValidity') }">
+            </p-inputNumber>
+            <label for="pointsValidity">Vigencia de Puntos (meses) <span class="text-red-500">*</span></label>
+          </span>
+          <small class="error" *ngIf="form.get('pointsValidity')?.hasError('required') && form.get('pointsValidity')?.touched">
+            Requerido
+          </small>
+        </div>
+
+        <div class="col-12 lg:col-6">
+          <span class="p-float-label">
+            <p-dropdown 
+              id="roundingType"
+              formControlName="roundingType"
+              [options]="roundingOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder=" "
+              [ngClass]="{ 'ng-filled': isFieldFilled('roundingType') }">
+            </p-dropdown>
+            <label for="roundingType">Tipo de Redondeo <span class="text-red-500">*</span></label>
+          </span>
+          <small class="error" *ngIf="form.get('roundingType')?.hasError('required') && form.get('roundingType')?.touched">
+            Requerido
+          </small>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3: ORDEN -->
+  <div class="form-section">
+    <div class="section-header">
+      <i class="pi pi-shopping-cart"></i>
+      <span class="section-title">Datos de Orden</span>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <p-dropdown 
+            id="branch"
+            formControlName="branch"
+            [options]="[
+              { label: 'Sucursal Principal', value: 'PRINCIPAL' },
+              { label: 'Sucursal 2', value: 'SUCURSAL_2' }
+            ]"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            [ngClass]="{ 'ng-filled': isFieldFilled('branch') }">
+          </p-dropdown>
+          <label for="branch">Sucursal <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('branch')?.hasError('required') && form.get('branch')?.touched">
+          Requerido
+        </small>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <span class="p-float-label">
+          <p-dropdown 
+            id="orderStatus"
+            formControlName="orderStatus"
+            [options]="orderStatusOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            [ngClass]="{ 'ng-filled': isFieldFilled('orderStatus') }">
+          </p-dropdown>
+          <label for="orderStatus">Estado <span class="text-red-500">*</span></label>
+        </span>
+        <small class="error" *ngIf="form.get('orderStatus')?.hasError('required') && form.get('orderStatus')?.touched">
+          Requerido
+        </small>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<div *ngIf="loading" class="loading-container">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- FOOTER DEL MODAL -->
+<ng-template pTemplate="footer">
+  <div class="footer-actions">
+    <p-button 
+      label="Cancelar" 
+      (click)="onCancel()"
+      severity="secondary"
+      [text]="true">
+    </p-button>
+    <p-button 
+      [label]="isEditMode ? 'Actualizar' : 'Emitir Membresía'" 
+      (click)="onSubmit()"
+      [disabled]="form.invalid || loading"
+      icon="pi pi-check"
+      severity="success">
+    </p-button>
+  </div>
+</ng-template>

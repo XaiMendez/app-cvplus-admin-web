@@ -1,0 +1,322 @@
+.self-registration-page {
+  min-height: calc(100vh - 80px);
+  background-color: var(--surface-ground);
+  padding: 2rem 1rem;
+}
+
+.page-content-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 120px);
+}
+
+.page-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .header-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+
+    &.success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--surface-900);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--surface-600);
+  }
+}
+
+.search-section {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-card,
+.client-card {
+  ::ng-deep {
+    .p-card {
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .p-card-body {
+      padding: 2rem;
+    }
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--surface-900);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    .required {
+      color: #ef4444;
+      margin-left: 0.25rem;
+    }
+  }
+
+  input {
+    padding: 0.875rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      outline: none;
+    }
+
+    &::placeholder {
+      color: var(--surface-600);
+    }
+  }
+
+  .error {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.client-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #f3e8ff 100%);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+
+  .info-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--surface-600);
+    letter-spacing: 0.5px;
+  }
+
+  .info-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--surface-900);
+    word-break: break-word;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  ::ng-deep .p-button {
+    padding: 0.875rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    min-width: 160px;
+
+    &.p-button-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%) !important;
+      border: none !important;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4) !important;
+        transform: translateY(-2px);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+    }
+
+    &.p-button-secondary {
+      background-color: transparent !important;
+      color: var(--primary-color) !important;
+      border: 2px solid var(--border-color) !important;
+
+      &:hover:not(:disabled) {
+        background-color: var(--surface-50) !important;
+        border-color: var(--primary-color) !important;
+      }
+    }
+
+    &.p-button-lg {
+      padding: 0.875rem 2.5rem !important;
+      font-size: 1rem !important;
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+
+  p {
+    margin: 0;
+    color: var(--surface-600);
+    font-size: 0.95rem;
+  }
+}
+
+.success-card {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+
+  ::ng-deep .p-card {
+    border-radius: 12px;
+    border: 1px solid #d1fae5;
+    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
+  }
+}
+
+.success-content {
+  text-align: center;
+  padding: 2rem 0;
+
+  .success-icon {
+    font-size: 4rem;
+    color: #10b981;
+    margin-bottom: 1rem;
+    animation: bounce 0.6s ease-out;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #059669;
+    margin-bottom: 0.75rem;
+  }
+
+  .success-message {
+    font-size: 1rem;
+    color: var(--surface-700);
+    margin: 0 0 1rem 0;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .self-registration-page {
+    padding: 1rem;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+  }
+
+  .client-info-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .info-item {
+    padding: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+
+    ::ng-deep .p-button {
+      width: 100%;
+      min-width: unset;
+    }
+  }
+
+  .search-card,
+  .client-card {
+    ::ng-deep .p-card-body {
+      padding: 1.5rem;
+    }
+  }
+}

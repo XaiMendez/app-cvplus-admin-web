@@ -1,0 +1,38 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-toolbar class="mb-4">
+  <ng-template pTemplate="start">
+    <h2 class="title">Clientes</h2>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <p-button
+      icon="pi pi-plus"
+      label="Crear"
+      (onClick)="onCreate()"
+      severity="success"
+      rounded>
+    </p-button>
+  </ng-template>
+</p-toolbar>
+
+<div class="container">
+
+  <!-- ERROR -->
+  <p-message
+    *ngIf="error"
+    severity="error"
+    [text]="error"
+    styleClass="mb-4 w-full">
+  </p-message>
+
+  <!-- TABLA -->
+  <app-generic-table
+    [data]="customers"
+    [columns]="columns"
+    [loading]="loading"
+    (actionTriggered)="onTableAction($event)">
+  </app-generic-table>
+
+</div>

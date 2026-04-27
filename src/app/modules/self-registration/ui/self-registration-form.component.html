@@ -1,0 +1,128 @@
+<p-toast position="top-right"></p-toast>
+
+<div class="self-registration-page">
+  <!-- IDLE & ERROR STATE - Búsqueda -->
+  @if (state === 'idle' || state === 'error') {
+    <div class="page-content-centered">
+      <div class="search-section">
+        <!-- Header -->
+        <div class="section-header">
+          <div class="header-icon">
+            <i class="pi pi-id-card"></i>
+          </div>
+          <h1>Autoafiliación de Membresía</h1>
+          <p>Búscate por DUI y completa tu membresía</p>
+        </div>
+
+        <!-- Card -->
+        <p-card class="search-card">
+          @if (state === 'error') {
+            <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4"></p-message>
+          }
+
+          <form [formGroup]="searchForm" (ngSubmit)="onSearchContact()">
+            <div class="form-group">
+              <label for="dui">Número de DUI <span class="required">*</span></label>
+              <input
+                pInputText
+                id="dui"
+                type="text"
+                formControlName="dui"
+                placeholder="Ej: 04689280-2"
+                class="w-full"
+              />
+              @if (searchForm.get('dui')?.hasError('required') && searchForm.get('dui')?.touched) {
+                <small class="error">El DUI es requerido</small>
+              }
+            </div>
+
+            <p-button
+              type="submit"
+              label="Buscar"
+              icon="pi pi-search"
+              [disabled]="searchForm.invalid"
+              class="w-full mt-4"
+            ></p-button>
+          </form>
+        </p-card>
+      </div>
+    </div>
+  }
+
+  <!-- SEARCHING STATE -->
+  @if (state === 'searching') {
+    <div class="page-content-centered">
+      <div class="loading-state">
+        <p-progressSpinner [style]="{ width: '50px', height: '50px' }" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+        <p class="mt-4 text-center">Buscando contacto...</p>
+      </div>
+    </div>
+  }
+
+  <!-- FOUND STATE -->
+  @if (state === 'found') {
+    <div class="page-content">
+      <!-- Header -->
+      <div class="section-header mb-6">
+        <div class="header-icon success">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <h1>Cliente Encontrado</h1>
+        <p>Información del cliente registrado</p>
+      </div>
+
+      <!-- Client Info Card -->
+      <p-card class="client-card">
+        <div class="client-info-grid">
+          <div class="info-item">
+            <span class="info-label">Nombre</span>
+            <span class="info-value">{{ contact?.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ contact?.email }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Teléfono</span>
+            <span class="info-value">{{ contact?.phone }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">DUI</span>
+            <span class="info-value">{{ contact?.dui }}</span>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <p-button
+          type="button"
+          label="Volver"
+          severity="secondary"
+          icon="pi pi-arrow-left"
+          (click)="onReset()"
+          [text]="true"
+          class="p-button-lg"
+        ></p-button>
+        <p-button
+          type="button"
+          label="Crear Membresía"
+          icon="pi pi-check"
+          (click)="onSubmit()"
+          class="p-button-lg"
+        ></p-button>
+      </div>
+    </div>
+  }
+
+  <!-- SUBMITTING STATE -->
+  @if (state === 'submitting') {
+    <div class="page-content-centered">
+      <div class="loading-state">
+        <p-progressSpinner [style]="{ width: '50px', height: '50px' }" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+        <p class="mt-4 text-center">Creando membresía...</p>
+      </div>
+    </div>
+  }
+
+</div>

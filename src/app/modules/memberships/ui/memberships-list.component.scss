@@ -1,0 +1,47 @@
+:deep {
+  .memberships-modal {
+    .p-dialog {
+      max-width: 1200px !important;
+    }
+
+    .p-dialog-content {
+      padding: 2rem 1.5rem;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .p-dialog-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .p-dialog-header-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .p-dialog-close {
+      color: white;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+    }
+  }
+}
+
+.title {
+  color: #1f2937;
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}

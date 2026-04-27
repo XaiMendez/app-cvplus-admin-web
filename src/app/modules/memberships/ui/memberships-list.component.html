@@ -1,0 +1,50 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-toolbar class="mb-4">
+  <ng-template pTemplate="start">
+    <div class="flex align-items-center gap-3">
+      <h2 class="title">Membresías</h2>
+      <p-button
+        *ngIf="customerId"
+        icon="pi pi-times"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        (onClick)="customerId = null; loadMemberships()"
+        pTooltip="Limpiar filtro"
+        tooltipPosition="top">
+      </p-button>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <p-button
+      icon="pi pi-plus"
+      label="Crear Membresía"
+      (onClick)="onCreate()"
+      severity="success"
+      rounded>
+    </p-button>
+  </ng-template>
+</p-toolbar>
+
+<div class="container">
+
+  <!-- ERROR -->
+  <p-message
+    *ngIf="error"
+    severity="error"
+    [text]="error"
+    styleClass="mb-4 w-full">
+  </p-message>
+
+  <!-- TABLA -->
+  <app-generic-table
+    [data]="memberships"
+    [columns]="columns"
+    [loading]="loading"
+    (actionTriggered)="onTableAction($event)">
+  </app-generic-table>
+
+</div>

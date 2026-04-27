@@ -1,88 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Membresía CV+</title>
-
-<style>
-body {
-  font-family: -apple-system, Arial, sans-serif;
-  background: #f5f5f5;
-  text-align: center;
-  padding: 30px;
-}
-
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  max-width: 400px;
-  margin: auto;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
-
-h2 {
-  margin-bottom: 10px;
-}
-
-p {
-  color: #555;
-}
-
-.btn {
-  display: block;
-  padding: 15px;
-  background: #007aff;
-  color: white;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.note {
-  margin-top: 15px;
-  font-size: 14px;
-  color: #888;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membresía CV+</title>
 </head>
-
 <body>
-
-<div class="card">
-  <h2>Membresía CV+</h2>
-  <p>Agrega tu membresía a Apple Wallet</p>
-
-  <a class="btn" href="https://pub2.pskt.io/6tERsjoSaoQgUVjHqmPpk9">
-    Agregar a Apple Wallet
-  </a>
-
-  <div class="note">
-    Si no funciona, abre este enlace en Safari
-  </div>
-</div>
-
-<script>
-// 🔥 DETECCIÓN CLAVE
-const isWebView = /(FBAN|FBAV|Instagram|WhatsApp|Messenger)/i.test(navigator.userAgent);
-
-if (isWebView) {
-  document.body.innerHTML = `
-    <div style="padding:30px; font-family:Arial;">
-      <h2>⚠️ Abrir en Safari</h2>
-      <p>Para agregar tu membresía a Apple Wallet:</p>
-      <ol style="text-align:left; max-width:300px; margin:auto;">
-        <li>Toca los <b>3 puntos</b> arriba</li>
-        <li>Selecciona <b>"Abrir en Safari"</b></li>
-      </ol>
-      <br>
-      <p style="color:#888;">Apple Wallet no funciona dentro de WhatsApp o apps similares.</p>
-    </div>
-  `;
-}
-</script>
-
+  <app-root></app-root>
 </body>
 </html>

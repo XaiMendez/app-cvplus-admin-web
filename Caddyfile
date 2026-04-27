@@ -1,6 +1,18 @@
 :80 {
 	root * /usr/share/caddy
+
+	# Enable gzip compression
 	encode gzip
-	try_files {path} /index.html
+
+	# SPA routing: try to serve the file, if not found serve index.html
+	try_files {path} {path}/ /index.html
+
+	# Serve static files
 	file_server
+
+	# Security headers
+	header X-Frame-Options SAMEORIGIN
+	header X-Content-Type-Options nosniff
+	header X-XSS-Protection "1; mode=block"
+	header Referrer-Policy strict-origin-when-cross-origin
 }

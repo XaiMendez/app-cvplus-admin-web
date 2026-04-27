@@ -6,14 +6,15 @@ import { LoyaltyAccountsListComponent } from './modules/loyalty/ui/loyalty-accou
 import { LoyaltyTransactionsComponent } from './modules/loyalty/ui/loyalty-transactions.component';
 import { LoyaltyRulesComponent } from './modules/loyalty/ui/loyalty-rules.component';
 import { SelfRegistrationFormComponent } from './modules/self-registration/ui/self-registration-form.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'memberships', component: MembershipsListComponent },
-  { path: 'customers', component: CustomersListComponent },
-  { path: 'loyalty/accounts', component: LoyaltyAccountsListComponent },
-  { path: 'loyalty/transactions/:customerId', component: LoyaltyTransactionsComponent },
-  { path: 'loyalty/rules', component: LoyaltyRulesComponent },
   { path: 'self-registration', component: SelfRegistrationFormComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: 'memberships', component: MembershipsListComponent, canActivate: [authGuard] },
+  { path: 'customers', component: CustomersListComponent, canActivate: [authGuard] },
+  { path: 'loyalty/accounts', component: LoyaltyAccountsListComponent, canActivate: [authGuard] },
+  { path: 'loyalty/transactions/:customerId', component: LoyaltyTransactionsComponent, canActivate: [authGuard] },
+  { path: 'loyalty/rules', component: LoyaltyRulesComponent, canActivate: [authGuard] },
+  { path: '', redirectTo: 'self-registration', pathMatch: 'full' }
 ];

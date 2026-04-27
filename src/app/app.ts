@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { CommonModule } from '@angular/common';
+import { AuthService } from './modules/auth/data-access/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,66 +13,84 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('cvplus-landing');
-
-  menuItems: MenuItem[] = [
-    {
-      label: 'Home',
-      icon: 'pi pi-fw pi-home',
-      routerLink: ['/memberships']
-    },
-    {
-      label: 'Autoafiliación',
-      icon: 'pi pi-fw pi-id-card',
-      routerLink: ['/self-registration']
-    },
-    {
-      label: 'Membresías',
-      icon: 'pi pi-fw pi-card',
-      routerLink: ['/memberships']
-    },
-    {
-      label: 'Clientes',
-      icon: 'pi pi-fw pi-users',
-      routerLink: ['/customers']
-    },
-    {
-      label: 'Lealtad',
-      icon: 'pi pi-fw pi-star',
-      items: [
+  menuItems = computed<MenuItem[]>(() => {
+    if (!this.authService.isLoggedIn()) {
+      return [
         {
-          label: 'Cuentas',
-          icon: 'pi pi-fw pi-list',
-          routerLink: ['/loyalty/accounts']
-        },
-        {
-          label: 'Reglas',
-          icon: 'pi pi-fw pi-cog',
-          routerLink: ['/loyalty/rules']
+          label: 'Iniciar Sesión',
+          icon: 'pi pi-fw pi-sign-in',
+          routerLink: ['/login']
         }
-      ]
-    },
-    {
-      label: 'Ayuda',
-      icon: 'pi pi-fw pi-question',
-      items: [
-        {
-          label: 'Documentación',
-          icon: 'pi pi-fw pi-book',
-          url: '#'
-        },
-        {
-          label: 'Contacto',
-          icon: 'pi pi-fw pi-envelope',
-          url: '#'
-        }
-      ]
+      ];
     }
-  ];
 
-  constructor(public router: Router) {}
+    return [
+      {
+        label: 'Home',
+        icon: 'pi pi-fw pi-home',
+        routerLink: ['/memberships']
+      },
+      {
+        label: 'Membresías',
+        icon: 'pi pi-fw pi-card',
+        routerLink: ['/memberships']
+      },
+      {
+        label: 'Clientes',
+        icon: 'pi pi-fw pi-users',
+        routerLink: ['/customers']
+      },
+      {
+        label: 'Lealtad',
+        icon: 'pi pi-fw pi-star',
+        items: [
+          {
+            label: 'Cuentas',
+            icon: 'pi pi-fw pi-list',
+            routerLink: ['/loyalty/accounts']
+          },
+          {
+            label: 'Reglas',
+            icon: 'pi pi-fw pi-cog',
+            routerLink: ['/loyalty/rules']
+          }
+        ]
+      },
+      {
+        label: 'Ayuda',
+        icon: 'pi pi-fw pi-question',
+        items: [
+          {
+            label: 'Documentación',
+            icon: 'pi pi-fw pi-book',
+            url: '#'
+          },
+          {
+            label: 'Contacto',
+            icon: 'pi pi-fw pi-envelope',
+            url: '#'
+          }
+        ]
+      },
+      {
+        label: 'Cerrar Sesión',
+        icon: 'pi pi-fw pi-sign-out',
+        command: () => this.logout()
+      }
+    ];
+  });
 
-  isLoginPage(): boolean {
-    return this.router.url === '/login';
+  constructor(
+    public router: Router,
+    private authService: AuthService
+  ) {}
+
+  isPublicPage(): boolean {
+    return this.router.url === '/login' || this.router.url === '/self-registration';
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/self-registration']);
   }
 }

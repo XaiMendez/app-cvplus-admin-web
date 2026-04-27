@@ -140,7 +140,7 @@ export class SelfRegistrationFormComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error: any) {
       this.state = 'error';
-      this.errorMessage = 'No se encontró contacto con este DUI';
+      this.errorMessage = 'No encontramos tu DUI en nuestro sistema. Escríbenos al ####### para mayor asistencia.';
       console.error('Error buscando DUI:', error);
       this.cdr.markForCheck();
     }
@@ -175,44 +175,29 @@ export class SelfRegistrationFormComponent implements OnInit {
       const response = await firstValueFrom(this.service.createMembership(internalCustomerId));
 
       if (response.success) {
-        const message = response.message || '¡Membresía creada exitosamente!';
-        this.messageService.add({
-          severity: 'success',
-          summary: '¡Éxito!',
-          detail: message,
-          life: 3000
-        });
-        setTimeout(() => this.onReset(), 3000);
+        this.state = 'success';
+        this.successMessage = `¡Bienvenido/a al Club CV+, ${this.contact.name}! 🎉`;
       } else {
-        const message = response.message || response?.errors?.[0]?.message || 'Error al crear la membresía';
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: message,
-          life: 5000
-        });
+        this.state = 'error';
+        const message = response.message || response?.errors?.[0]?.message;
+
+        if (message?.includes('already') || message?.includes('miembro') || message?.includes('ya')) {
+          this.errorMessage = 'Ya eres miembro CV+. Escríbenos al ####### para ayudarte.';
+        } else {
+          this.errorMessage = '¡Casi listo! Hubo un problema al preparar tu Membresía. ¿Prefieres que te ayudemos por WhatsApp? Haz clic aquí o escríbenos al [Número]';
+        }
       }
-      this.state = 'found';
       this.cdr.markForCheck();
     } catch (error: any) {
-      let errorMessage = 'Error al crear la membresía. Por favor, intenta de nuevo.';
+      this.state = 'error';
+      const message = error?.error?.message || error?.message || '';
 
-      if (error?.error?.message) {
-        errorMessage = error.error.message;
-      } else if (error?.error?.errors?.[0]?.message) {
-        errorMessage = error.error.errors[0].message;
-      } else if (error?.error?.detail) {
-        errorMessage = error.error.detail;
+      if (message.includes('already') || message.includes('miembro') || message.includes('ya')) {
+        this.errorMessage = 'Ya eres miembro CV+. Escríbenos al ####### para ayudarte.';
+      } else {
+        this.errorMessage = '¡Casi listo! Hubo un problema al preparar tu Membresía. ¿Prefieres que te ayudemos por WhatsApp? Haz clic aquí o escríbenos al [Número]';
       }
 
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: errorMessage,
-        life: 5000
-      });
-
-      this.state = 'found';
       console.error('Error creando membresía:', error);
       this.cdr.markForCheck();
     }

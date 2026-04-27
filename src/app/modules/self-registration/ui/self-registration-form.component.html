@@ -5,13 +5,40 @@
   @if (state === 'idle' || state === 'error') {
     <div class="page-content-centered">
       <div class="search-section">
+        <!-- Visual Header -->
+        <div class="visual-header">
+          <div class="header-accent"></div>
+        </div>
+
         <!-- Header -->
         <div class="section-header">
-          <div class="header-icon">
-            <i class="pi pi-id-card"></i>
+          <h1>Tus compras siempre te dan MÁS.</h1>
+          <p class="subtitle-main">Únete a nuestro programa de lealtad. Es gratis, sin complicaciones y en menos de 1 minuto.</p>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits-list">
+          <div class="benefit-item">
+            <i class="pi pi-check benefit-icon"></i>
+            <div>
+              <strong>Acumula al instante:</strong>
+              <span>Cada compra se transforma automáticamente en puntos.</span>
+            </div>
           </div>
-          <h1>Autoafiliación de Membresía</h1>
-          <p>Búscate por DUI y completa tu membresía</p>
+          <div class="benefit-item">
+            <i class="pi pi-check benefit-icon"></i>
+            <div>
+              <strong>Canjea cuando quieras:</strong>
+              <span>Úsalos como forma de pago en tu próxima visita.</span>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <i class="pi pi-check benefit-icon"></i>
+            <div>
+              <strong>Recibe más:</strong>
+              <span>Disfruta de preventas y descuentos exclusivos.</span>
+            </div>
+          </div>
         </div>
 
         <!-- Card -->
@@ -20,26 +47,24 @@
             <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4"></p-message>
           }
 
+          <p class="instructive-text">Búscate por DUI y completa tu membresía</p>
+
           <form [formGroup]="searchForm" (ngSubmit)="onSearchContact()">
             <div class="form-group">
-              <label for="dui">Número de DUI <span class="required">*</span></label>
               <input
                 pInputText
                 id="dui"
                 type="text"
                 formControlName="dui"
-                placeholder="Ej: 04689280-2"
+                placeholder="Ingresa tu DUI…"
                 class="w-full"
               />
-              @if (searchForm.get('dui')?.hasError('required') && searchForm.get('dui')?.touched) {
-                <small class="error">El DUI es requerido</small>
-              }
             </div>
 
             <p-button
               type="submit"
-              label="Buscar"
-              icon="pi pi-search"
+              label="¡Activar mi Membresía!"
+              icon="pi pi-check"
               [disabled]="searchForm.invalid"
               class="w-full mt-4"
             ></p-button>
@@ -59,17 +84,24 @@
     </div>
   }
 
-  <!-- FOUND STATE -->
+  <!-- FOUND STATE - Página 2 Confirmación -->
   @if (state === 'found') {
     <div class="page-content">
+      <!-- Visual Header -->
+      <div class="visual-header">
+        <div class="header-accent header-accent-secondary"></div>
+      </div>
+
       <!-- Header -->
       <div class="section-header mb-6">
-        <div class="header-icon success">
-          <i class="pi pi-check-circle"></i>
-        </div>
-        <h1>Cliente Encontrado</h1>
-        <p>Información del cliente registrado</p>
+        <h1>¡Ya casi tienes tus puntos, {{ contact?.name }}!</h1>
+        <p class="subtitle-main">Confirma que tus datos están correctos y recibe tu membresía al instante.</p>
       </div>
+
+      <!-- Error Message (already member) -->
+      @if (errorMessage) {
+        <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4 error-alert"></p-message>
+      }
 
       <!-- Client Info Card -->
       <p-card class="client-card">
@@ -79,7 +111,7 @@
             <span class="info-value">{{ contact?.name }}</span>
           </div>
           <div class="info-item">
-            <span class="info-label">Email</span>
+            <span class="info-label">Correo</span>
             <span class="info-value">{{ contact?.email }}</span>
           </div>
           <div class="info-item">
@@ -97,16 +129,15 @@
       <div class="action-buttons">
         <p-button
           type="button"
-          label="Volver"
+          label="← Volver"
           severity="secondary"
-          icon="pi pi-arrow-left"
           (click)="onReset()"
           [text]="true"
           class="p-button-lg"
         ></p-button>
         <p-button
           type="button"
-          label="Crear Membresía"
+          label="Activar mi Membresía CV+ ›"
           icon="pi pi-check"
           (click)="onSubmit()"
           class="p-button-lg"
@@ -121,6 +152,58 @@
       <div class="loading-state">
         <p-progressSpinner [style]="{ width: '50px', height: '50px' }" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
         <p class="mt-4 text-center">Creando membresía...</p>
+      </div>
+    </div>
+  }
+
+  <!-- SUCCESS STATE - Página 3 Confirmación -->
+  @if (state === 'success') {
+    <div class="page-content-centered">
+      <div class="success-section">
+        <!-- Visual Header -->
+        <div class="visual-header">
+          <div class="header-accent header-accent-success"></div>
+        </div>
+
+        <!-- Header -->
+        <div class="section-header mb-6">
+          <h1>{{ successMessage }}</h1>
+        </div>
+
+        <!-- Success Card -->
+        <p-card class="success-card">
+          <div class="success-icon-large">
+            <i class="pi pi-check-circle"></i>
+          </div>
+
+          <p class="success-body">
+            Tu membresía ya es oficial. Acabamos de enviar tu tarjeta digital al <strong>{{ contact?.email }}</strong>.
+            Ábrelo desde tu celular, agrégala a tu billetera digital (Apple Wallet o Google Wallet) y ¡listo!
+            Ya estás acumulando puntos en cada visita.
+          </p>
+
+          <div class="help-section">
+            <p class="help-title">Ayuda contextual:</p>
+            <div class="help-item">
+              <i class="pi pi-question-circle"></i>
+              <span><strong>¿No la ves?</strong> Revisa tu carpeta de "Promociones" o "Spam".</span>
+            </div>
+            <div class="help-item">
+              <i class="pi pi-question-circle"></i>
+              <span><strong>¿Necesitas ayuda?</strong> Escríbenos directamente al [Número] y te apoyamos.</span>
+            </div>
+          </div>
+
+          <div class="action-buttons mt-6">
+            <p-button
+              type="button"
+              label="Volver al Inicio"
+              icon="pi pi-home"
+              (click)="onReset()"
+              class="p-button-lg"
+            ></p-button>
+          </div>
+        </p-card>
       </div>
     </div>
   }

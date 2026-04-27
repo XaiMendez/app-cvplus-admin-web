@@ -1,7 +1,7 @@
-@if (!isLoginPage()) {
-  <p-menubar [model]="menuItems"></p-menubar>
+@if (!isPublicPage()) {
+  <p-menubar [model]="menuItems()"></p-menubar>
 }
 
-<div [style]="isLoginPage() ? '' : 'padding: 2rem;'">
+<div [style]="isPublicPage() ? '' : 'padding: 2rem;'">
   <router-outlet></router-outlet>
 </div>

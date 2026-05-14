@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../data-access/auth.service';
 
@@ -19,11 +18,11 @@ import { AuthService } from '../data-access/auth.service';
     ButtonModule,
     CheckboxModule,
     InputTextModule,
-    PasswordModule,
     RippleModule
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent {
   email: string = '';

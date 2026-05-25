@@ -23,6 +23,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
         <table class="simple-table">
           <thead>
             <tr>
+              <th>ID ODOO</th>
               <th>Cliente</th>
               <th>Puntos</th>
               <th>Estado</th>
@@ -32,6 +33,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
           </thead>
           <tbody>
             <tr *ngFor="let item of paginatedData; trackBy: trackByFn" class="table-row">
+              <td class="cell-id">{{ item.customer?.customer_id }}</td>
               <td class="cell-name">{{ item.customer?.display_name }}</td>
               <td class="cell-number">{{ item.total_points }}</td>
               <td class="cell-status">
@@ -64,7 +66,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
               </td>
             </tr>
             <tr *ngIf="!paginatedData || paginatedData.length === 0" class="empty-row">
-              <td [attr.colspan]="5">
+              <td [attr.colspan]="6">
                 <div class="empty-state">
                   <i nz-icon nzType="inbox" nzTheme="outline" class="empty-icon"></i>
                   <p>Sin datos disponibles</p>
@@ -145,6 +147,13 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     .table-row:hover {
       background: #fafafa;
       box-shadow: inset 0 0 0 1px rgba(10, 162, 192, 0.08);
+    }
+
+    .cell-id {
+      font-weight: 600;
+      color: #0aa2c0;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
     }
 
     .cell-name {

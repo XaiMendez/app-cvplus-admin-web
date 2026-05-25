@@ -53,6 +53,7 @@ export class SelfRegistrationFormComponent implements OnInit {
   state: FormState = 'idle';
   searchForm!: FormGroup;
   membershipForm!: FormGroup;
+  editForm!: FormGroup;
   contact: OdooContact | null = null;
   tiers: { label: string; value: string }[] = [];
   errorMessage = '';
@@ -69,6 +70,7 @@ export class SelfRegistrationFormComponent implements OnInit {
   ngOnInit() {
     this.initSearchForm();
     this.initMembershipForm();
+    this.initEditForm();
     this.loadTiers();
   }
 
@@ -88,6 +90,24 @@ export class SelfRegistrationFormComponent implements OnInit {
     });
 
     this.setupFormValueTracking();
+  }
+
+  private initEditForm() {
+    this.editForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required]
+    });
+  }
+
+  private populateEditForm() {
+    if (this.contact) {
+      this.editForm.patchValue({
+        name: this.contact.name || '',
+        email: this.contact.email || '',
+        phone: this.contact.phone || ''
+      });
+    }
   }
 
   private setupFormValueTracking() {
@@ -136,6 +156,7 @@ export class SelfRegistrationFormComponent implements OnInit {
       if (!this.contact) {
         throw new Error('No se encontró contacto');
       }
+      this.populateEditForm();
       this.state = 'found';
       this.cdr.markForCheck();
     } catch (error: any) {
@@ -156,6 +177,7 @@ export class SelfRegistrationFormComponent implements OnInit {
     this.contact = null;
     this.searchForm.reset();
     this.membershipForm.reset();
+    this.editForm.reset();
     this.errorMessage = '';
     this.successMessage = '';
     this.filledFields.clear();
@@ -163,7 +185,7 @@ export class SelfRegistrationFormComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (!this.contact) return;
+    if (!this.contact || this.editForm.invalid) return;
 
     this.state = 'submitting';
     this.errorMessage = '';
@@ -172,11 +194,14 @@ export class SelfRegistrationFormComponent implements OnInit {
 
     try {
       const internalCustomerId = this.contact.internal_customer_id || this.contact.id;
-      const response = await firstValueFrom(this.service.createMembership(internalCustomerId));
+      const editedData: { name: string; email: string; phone: string } = this.editForm.value;
+      const response = await firstValueFrom(
+        this.service.createMembership(internalCustomerId, editedData)
+      );
 
       if (response.success) {
         this.state = 'success';
-        this.successMessage = `¡Bienvenido/a al Club CV+, ${this.contact.name}! 🎉`;
+        this.successMessage = `¡Bienvenido/a al Club CV+, ${editedData.name}! 🎉`;
       } else {
         this.state = 'error';
         const message = response.message || response?.errors?.[0]?.message;

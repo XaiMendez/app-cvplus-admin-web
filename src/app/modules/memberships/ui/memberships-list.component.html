@@ -1,50 +1,35 @@
-<p-toast></p-toast>
-<p-confirmDialog></p-confirmDialog>
-
-<p-toolbar class="mb-4">
-  <ng-template pTemplate="start">
-    <div class="flex align-items-center gap-3">
-      <h2 class="title">Membresías</h2>
-      <p-button
-        *ngIf="customerId"
-        icon="pi pi-times"
-        [rounded]="true"
-        [text]="true"
-        severity="secondary"
-        (onClick)="customerId = null; loadMemberships()"
-        pTooltip="Limpiar filtro"
-        tooltipPosition="top">
-      </p-button>
+<div class="memberships-container">
+  <!-- HEADER CON TITULO Y BOTON -->
+  <div class="memberships-header">
+    <div class="header-left">
+      <h1 class="page-title">Membresías</h1>
+      <p class="page-subtitle">Gestiona todas las membresías de tus clientes</p>
     </div>
-  </ng-template>
+    <div class="header-right">
+      <button nz-button nzType="primary" nzSize="large" (click)="onCreate()" class="btn-create">
+        <i nz-icon nzType="plus" nzTheme="outline"></i>
+        <span>Crear Membresía</span>
+      </button>
+    </div>
+  </div>
 
-  <ng-template pTemplate="end">
-    <p-button
-      icon="pi pi-plus"
-      label="Crear Membresía"
-      (onClick)="onCreate()"
-      severity="success"
-      rounded>
-    </p-button>
-  </ng-template>
-</p-toolbar>
+  <!-- ALERTA DE ERROR -->
+  @if (error) {
+    <nz-alert
+      nzType="error"
+      [nzMessage]="error"
+      nzShowIcon
+      [nzCloseable]="false"
+      class="error-alert">
+    </nz-alert>
+  }
 
-<div class="container">
-
-  <!-- ERROR -->
-  <p-message
-    *ngIf="error"
-    severity="error"
-    [text]="error"
-    styleClass="mb-4 w-full">
-  </p-message>
-
-  <!-- TABLA -->
-  <app-generic-table
-    [data]="memberships"
-    [columns]="columns"
-    [loading]="loading"
-    (actionTriggered)="onTableAction($event)">
-  </app-generic-table>
-
+  <!-- TABLA DE MEMBRESÍAS -->
+  <div class="table-section">
+    <app-memberships-table
+      [data]="memberships"
+      (editRow)="onEdit($event)"
+      (deleteRow)="onDelete($event)">
+    </app-memberships-table>
+  </div>
 </div>

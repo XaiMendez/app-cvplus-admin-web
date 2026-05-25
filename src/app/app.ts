@@ -1,89 +1,107 @@
-import { Component, computed } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { AuthService } from './modules/auth/data-access/auth.service';
+
+interface MenuItem {
+  label: string;
+  icon?: string;
+  routerLink?: string[];
+  url?: string;
+  items?: MenuItem[];
+  command?: () => void;
+}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MenubarModule, CommonModule],
+  imports: [RouterOutlet, RouterLink, CommonModule, NzLayoutModule, NzMenuModule, NzButtonModule, NzIconModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  menuItems = computed<MenuItem[]>(() => {
-    if (!this.authService.isLoggedIn()) {
-      return [
+export class App implements OnInit {
+  menuItems: MenuItem[] | undefined;
+  isLoggedIn = false;
+  protected readonly date = new Date();
+
+  constructor(
+    public router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    this.isLoggedIn = this.authService.isLoggedIn();
+
+    if (!this.isLoggedIn) {
+      this.menuItems = [
         {
           label: 'Iniciar Sesión',
-          icon: 'pi pi-fw pi-sign-in',
+          icon: 'login',
           routerLink: ['/login']
         }
       ];
+      return;
     }
 
-    return [
+    this.menuItems = [
       {
         label: 'Home',
-        icon: 'pi pi-fw pi-home',
+        icon: 'home',
         routerLink: ['/memberships']
       },
       {
         label: 'Membresías',
-        icon: 'pi pi-fw pi-card',
+        icon: 'credit-card',
         routerLink: ['/memberships']
       },
       {
         label: 'Clientes',
-        icon: 'pi pi-fw pi-users',
+        icon: 'team',
         routerLink: ['/customers']
       },
       {
         label: 'Lealtad',
-        icon: 'pi pi-fw pi-star',
+        icon: 'star',
         items: [
           {
             label: 'Cuentas',
-            icon: 'pi pi-fw pi-list',
+            icon: 'menu',
             routerLink: ['/loyalty/accounts']
           },
           {
             label: 'Reglas',
-            icon: 'pi pi-fw pi-cog',
+            icon: 'setting',
             routerLink: ['/loyalty/rules']
           }
         ]
       },
       {
         label: 'Ayuda',
-        icon: 'pi pi-fw pi-question',
+        icon: 'question-circle',
         items: [
           {
             label: 'Documentación',
-            icon: 'pi pi-fw pi-book',
+            icon: 'file',
             url: '#'
           },
           {
             label: 'Contacto',
-            icon: 'pi pi-fw pi-envelope',
+            icon: 'mail',
             url: '#'
           }
         ]
       },
       {
         label: 'Cerrar Sesión',
-        icon: 'pi pi-fw pi-sign-out',
+        icon: 'logout',
         command: () => this.logout()
       }
     ];
-  });
-
-  constructor(
-    public router: Router,
-    private authService: AuthService
-  ) {}
+  }
 
   isPublicPage(): boolean {
     return this.router.url === '/login' || this.router.url === '/self-registration';

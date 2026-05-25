@@ -105,24 +105,43 @@
 
       <!-- Client Info Card -->
       <p-card class="client-card">
-        <div class="client-info-grid">
-          <div class="info-item">
-            <span class="info-label">Nombre</span>
-            <span class="info-value">{{ contact?.name }}</span>
+        <form [formGroup]="editForm">
+          <div class="client-info-grid">
+            <div class="info-item">
+              <span class="info-label">Nombre</span>
+              <input
+                pInputText
+                formControlName="name"
+                class="w-full"
+                placeholder="Tu nombre completo"
+              />
+            </div>
+            <div class="info-item">
+              <span class="info-label">Correo</span>
+              <input
+                pInputText
+                type="email"
+                formControlName="email"
+                class="w-full"
+                placeholder="tu@email.com"
+              />
+            </div>
+            <div class="info-item">
+              <span class="info-label">Teléfono</span>
+              <input
+                pInputText
+                type="tel"
+                formControlName="phone"
+                class="w-full"
+                placeholder="Tu teléfono"
+              />
+            </div>
+            <div class="info-item">
+              <span class="info-label">DUI</span>
+              <span class="info-value">{{ contact?.dui }}</span>
+            </div>
           </div>
-          <div class="info-item">
-            <span class="info-label">Correo</span>
-            <span class="info-value">{{ contact?.email }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Teléfono</span>
-            <span class="info-value">{{ contact?.phone }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">DUI</span>
-            <span class="info-value">{{ contact?.dui }}</span>
-          </div>
-        </div>
+        </form>
       </p-card>
 
       <!-- Action Buttons -->
@@ -140,6 +159,7 @@
           label="Activar mi Membresía CV+ ›"
           icon="pi pi-check"
           (click)="onSubmit()"
+          [disabled]="editForm.invalid"
           class="p-button-lg"
         ></p-button>
       </div>

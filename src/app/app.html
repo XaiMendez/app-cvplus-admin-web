@@ -1,7 +1,62 @@
 @if (!isPublicPage()) {
-  <p-menubar [model]="menuItems()"></p-menubar>
+  <nz-layout class="layout-container">
+    <!-- HEADER TOP -->
+    <nz-header class="app-header">
+      <div class="header-left">
+        <div class="logo">CV+</div>
+        <span class="brand-text">Sistema de Membresías</span>
+      </div>
+
+      <ul nz-menu [nzMode]="'horizontal'" [nzTheme]="'dark'" class="app-menu">
+        @for (item of menuItems; track item.label) {
+          @if (item.items && item.items.length > 0) {
+            <li nz-submenu [nzTitle]="item.label">
+              <i *ngIf="item.icon" nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+              <ul>
+                @for (subitem of item.items; track subitem.label) {
+                  <li nz-menu-item [routerLink]="subitem.routerLink">
+                    <i *ngIf="subitem.icon" nz-icon [nzType]="subitem.icon" nzTheme="outline"></i>
+                    <span>{{ subitem.label }}</span>
+                  </li>
+                }
+              </ul>
+            </li>
+          } @else {
+            @if (item.label === 'Cerrar Sesión') {
+              <li nz-menu-item (click)="logout()" class="logout-item">
+                <i *ngIf="item.icon" nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+                <span>{{ item.label }}</span>
+              </li>
+            } @else {
+              <li nz-menu-item [routerLink]="item.routerLink">
+                <i *ngIf="item.icon" nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+                <span>{{ item.label }}</span>
+              </li>
+            }
+          }
+        }
+      </ul>
+
+      <div class="header-right"></div>
+    </nz-header>
+
+    <!-- MAIN CONTENT -->
+    <nz-layout class="main-layout">
+      <nz-content class="app-content">
+        <div class="content-wrapper">
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+
+      <nz-footer class="app-footer">
+        <p>© {{ date.getFullYear() }} CV+ Sistema de Membresías. Todos los derechos reservados.</p>
+      </nz-footer>
+    </nz-layout>
+  </nz-layout>
 }
 
-<div [style]="isPublicPage() ? '' : 'padding: 2rem;'">
-  <router-outlet></router-outlet>
-</div>
+@if (isPublicPage()) {
+  <div class="public-page">
+    <router-outlet></router-outlet>
+  </div>
+}

@@ -1,0 +1,137 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+:host ::ng-deep {
+  .table-card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .table-header {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #262626;
+    margin: 0;
+  }
+
+  nz-input-group {
+    width: 350px;
+  }
+
+  nz-input-group input {
+    border-radius: 4px;
+  }
+
+  /* Table */
+  .striped-table {
+    width: 100%;
+
+    th {
+      background: #fafafa;
+      color: #262626;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border-bottom: 2px solid #f0f0f0 !important;
+      padding: 1rem !important;
+    }
+
+    td {
+      color: #595959;
+      font-size: 14px;
+      padding: 1rem !important;
+      border-bottom: 1px solid #f0f0f0 !important;
+    }
+
+    tr:hover {
+      background: #fafafa;
+    }
+  }
+
+  /* Tags */
+  nz-tag {
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+
+    &.tag {
+      border: none;
+    }
+  }
+
+  /* Buttons */
+  button[nz-button] {
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &[nzType="primary"] {
+      background: #0aa2c0;
+      border-color: #0aa2c0;
+
+      &:hover {
+        background: #0891b2;
+        border-color: #0891b2;
+      }
+
+      &:not([nzDanger="true"]) {
+        background: #0aa2c0;
+        border-color: #0aa2c0;
+
+        &:hover {
+          background: #0891b2;
+          border-color: #0891b2;
+        }
+      }
+
+      &[nzDanger="true"] {
+        background: #ff7875;
+        border-color: #ff7875;
+
+        &:hover {
+          background: #ff4d4f;
+          border-color: #ff4d4f;
+        }
+      }
+    }
+  }
+
+  /* Spinner */
+  nz-spin {
+    width: 100%;
+  }
+
+  /* Space */
+  nz-space {
+    width: 100%;
+  }
+
+  /* Pagination */
+  nz-pagination {
+    margin-top: 1rem;
+  }
+
+  .ant-pagination-item {
+    border-radius: 4px;
+  }
+
+  .ant-pagination-item-active {
+    background: #0aa2c0 !important;
+    border-color: #0aa2c0 !important;
+
+    a {
+      color: white !important;
+    }
+  }
+}

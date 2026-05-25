@@ -6,6 +6,7 @@ export interface Membership {
   tier_passkit_id: string;
   end_date: string;
   status: 'CREADO' | 'ACTIVO' | 'INACTIVO';
+  total_points: number;
   created_at: string;
   updated_at: string;
   customer: Customer | null;

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './modules/auth/pages/login.component';
 import { MembershipsListComponent } from './modules/memberships/ui/memberships-list.component';
+import { MembershipsFormPageComponent } from './modules/memberships/pages/memberships-form-page.component';
 import { CustomersListComponent } from './modules/customers/ui/customers-list.component';
 import { LoyaltyAccountsListComponent } from './modules/loyalty/ui/loyalty-accounts-list.component';
 import { LoyaltyTransactionsComponent } from './modules/loyalty/ui/loyalty-transactions.component';
@@ -12,6 +13,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'self-registration', component: SelfRegistrationFormComponent },
   { path: 'memberships', component: MembershipsListComponent, canActivate: [authGuard] },
+  { path: 'memberships/new', component: MembershipsFormPageComponent, canActivate: [authGuard] },
+  { path: 'memberships/:id/edit', component: MembershipsFormPageComponent, canActivate: [authGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [authGuard] },
   { path: 'loyalty/accounts', component: LoyaltyAccountsListComponent, canActivate: [authGuard] },
   { path: 'loyalty/transactions/:customerId', component: LoyaltyTransactionsComponent, canActivate: [authGuard] },

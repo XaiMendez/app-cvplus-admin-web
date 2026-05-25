@@ -1,3 +1,6 @@
+/* Ant Design Theme */
+@import "ng-zorro-antd/ng-zorro-antd.min.css";
+
 /* PrimeNG Icons and Core */
 @import "primeicons/primeicons.css";
 
@@ -331,109 +334,8 @@ button[type="button"],
   background-color: var(--surface-50);
 }
 
-/* MenuBar Styles */
-.p-menubar {
-  background: linear-gradient(135deg, #ffffff 0%, var(--surface-ground) 100%);
-  padding: 0;
-  border: none;
-  border-bottom: 2px solid var(--primary-color);
-  border-radius: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.p-menubar .p-menubar-root-list > li > a {
-  color: var(--text-color);
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.p-menubar .p-menubar-root-list > li > a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background-color: var(--primary-color);
-  transform: translateX(-50%);
-  transition: width 0.3s ease;
-}
-
-.p-menubar .p-menubar-root-list > li > a:hover::after,
-.p-menubar .p-menubar-root-list > li.p-menuitem-active > a::after {
-  width: 80%;
-}
-
-.p-menubar .p-menubar-root-list > li > a:hover,
-.p-menubar .p-menubar-root-list > li.p-menuitem-active > a {
-  background-color: rgba(10, 162, 192, 0.08);
-  color: var(--primary-color);
-}
-
-.p-menubar .p-menubar-root-list > li > a i {
-  font-size: 18px;
-  transition: transform 0.3s ease;
-}
-
-.p-menubar .p-menubar-root-list > li > a:hover i {
-  transform: scale(1.1);
-}
-
-/* MenuBar Submenu Styles */
-.p-submenu-list {
-  background-color: white;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  padding: 0.5rem 0;
-  min-width: 200px;
-}
-
-.p-menuitem {
-  padding: 0;
-}
-
-.p-menuitem > a,
-.p-submenu-list .p-menuitem > a {
-  color: var(--text-color);
-  padding: 0.75rem 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border-radius: 6px;
-  margin: 0.25rem 0.5rem;
-}
-
-.p-submenu-list .p-menuitem > a {
-  border-radius: 6px;
-}
-
-.p-submenu-list .p-menuitem > a:hover {
-  background-color: var(--primary-color);
-  color: white;
-  transform: translateX(4px);
-}
-
-.p-submenu-list .p-menuitem > a i {
-  font-size: 16px;
-}
-
-.p-menubar .p-menubar-root-list > li > .p-menuitem-link > .p-submenu-icon {
-  color: white;
-  transition: transform 0.3s ease;
-}
-
-.p-menubar .p-menubar-root-list > li.p-menuitem-active > .p-menuitem-link > .p-submenu-icon {
-  transform: rotate(180deg);
-}
+/* MenuBar Styles - controlado por app.css con ::ng-deep */
+/* Los estilos del menubar están centralizados en app.css para mejor mantenimiento */
 
 /* Input Styles */
 .p-input-icon-left {
@@ -940,4 +842,52 @@ form button:disabled {
 button.p-button-lg {
   padding: 0.875rem 2.5rem !important;
   font-size: 1rem !important;
+}
+
+/* Listbox Styles */
+.p-listbox {
+  width: 100%;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.p-listbox .p-listbox-header {
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+}
+
+.p-listbox .p-listbox-list {
+  padding: 0.5rem 0;
+}
+
+.p-listbox .p-listbox-item {
+  padding: 0.75rem 1rem;
+  color: #374151;
+  font-size: 14px;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.p-listbox .p-listbox-item:hover {
+  background: #f9fafb;
+  color: #111827;
+}
+
+.p-listbox .p-listbox-item:last-child {
+  border-bottom: none;
+}
+
+.p-listbox .p-listbox-item.p-highlight {
+  background: #0aa2c0;
+  color: white;
+}
+
+.p-listbox .p-listbox-item.p-highlight:hover {
+  background: #0891b2;
 }

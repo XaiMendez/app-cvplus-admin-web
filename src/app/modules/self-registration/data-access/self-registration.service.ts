@@ -19,9 +19,15 @@ export class SelfRegistrationService {
     return this.http.get<Tier[]>(`${this.apiUrl}/tiers`);
   }
 
-  createMembership(internalCustomerId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/memberships/self-enroll`, {
+  createMembership(internalCustomerId: string, userData?: { name: string; email: string; phone: string }): Observable<any> {
+    const payload: any = {
       internal_customer_id: internalCustomerId
-    });
+    };
+    if (userData) {
+      payload.name = userData.name;
+      payload.email = userData.email;
+      payload.phone = userData.phone;
+    }
+    return this.http.post(`${this.apiUrl}/memberships/self-enroll`, payload);
   }
 }

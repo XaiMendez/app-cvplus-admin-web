@@ -1,0 +1,15 @@
+<nz-spin [nzSimple]="true" [nzSpinning]="loading">
+  <nz-page-header
+    [nzTitle]="isEditMode ? '✏️ Editar Membresía' : '➕ Crear Membresía'"
+    nzBackIcon
+    (nzBack)="onFormCancel()">
+  </nz-page-header>
+
+  <div class="form-container">
+    <app-memberships-form
+      [membership]="membership"
+      (submit)="onFormSubmit($event)"
+      (cancel)="onFormCancel()">
+    </app-memberships-form>
+  </div>
+</nz-spin>

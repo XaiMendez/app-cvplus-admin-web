@@ -6,10 +6,17 @@
   </nz-page-header>
 
   <div class="form-container">
-    <app-memberships-form
-      [membership]="membership"
-      (submit)="onFormSubmit($event)"
-      (cancel)="onFormCancel()">
-    </app-memberships-form>
+    @if (isEditMode) {
+      <app-memberships-form
+        [membership]="membership"
+        (submit)="onFormSubmit($event)"
+        (cancel)="onFormCancel()">
+      </app-memberships-form>
+    } @else {
+      <app-memberships-create
+        (submit)="onFormSubmit($event)"
+        (cancel)="onFormCancel()">
+      </app-memberships-create>
+    }
   </div>
 </nz-spin>

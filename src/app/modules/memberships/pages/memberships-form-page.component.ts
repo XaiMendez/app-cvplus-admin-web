@@ -7,6 +7,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { MembershipsFormComponent } from '../ui/memberships-form.component';
+import { MembershipsCreateComponent } from '../ui/memberships-create.component';
 import { MembershipsService } from '../data-access/memberships.service';
 import { Membership } from '../models/membership.model';
 
@@ -16,6 +17,7 @@ import { Membership } from '../models/membership.model';
   imports: [
     CommonModule,
     MembershipsFormComponent,
+    MembershipsCreateComponent,
     NzPageHeaderModule,
     NzButtonModule,
     NzSpinModule

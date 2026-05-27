@@ -1,0 +1,162 @@
+<nz-spin [nzSimple]="true" [nzSpinning]="loading">
+  <form [formGroup]="form" class="membership-form">
+
+    <!-- SECCIÓN 1: SELECCIONAR CLIENTE -->
+    <div class="form-section">
+      <div class="section-header">
+        <i nz-icon nzType="user" nzTheme="outline" nzSize="lg"></i>
+        <h3>Seleccionar Cliente</h3>
+      </div>
+
+      <div class="form-grid">
+        <nz-form-item class="form-item-full">
+          <nz-form-label nzRequired>Cliente</nz-form-label>
+          <nz-form-control nzErrorTip="Por favor selecciona un cliente">
+            <nz-select
+              formControlName="customerId"
+              nzPlaceHolder="Buscar y seleccionar cliente"
+              nzSize="large"
+              [nzShowSearch]="true"
+              nzNotFoundContent="Sin clientes"
+              (ngModelChange)="onCustomerSelect($event)"
+              class="form-select">
+              <nz-option
+                *ngFor="let customer of customers"
+                [nzValue]="customer.id"
+                [nzLabel]="customer.display_name">
+                <span>{{ customer.display_name }} ({{ customer.customer_id }})</span>
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: DATOS DEL CLIENTE SELECCIONADO -->
+    @if (selectedCustomer) {
+      <nz-divider></nz-divider>
+
+      <div class="form-section">
+        <div class="section-header">
+          <i nz-icon nzType="info-circle" nzTheme="outline" nzSize="lg"></i>
+          <h3>Información del Cliente</h3>
+        </div>
+
+        <div class="form-grid">
+          <nz-form-item class="form-item-full">
+            <nz-form-label>Nombre</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                [value]="selectedCustomer.display_name"
+                placeholder="Nombre"
+                nzSize="large"
+                disabled
+                class="form-input" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <div class="form-row">
+            <nz-form-item class="form-item-half">
+              <nz-form-label>Email</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  [value]="selectedCustomer.email"
+                  placeholder="Email"
+                  nzSize="large"
+                  disabled
+                  class="form-input" />
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item class="form-item-half">
+              <nz-form-label>Teléfono</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  [value]="selectedCustomer.phone"
+                  placeholder="Teléfono"
+                  nzSize="large"
+                  disabled
+                  class="form-input" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- SECCIÓN 3: DATOS DE MEMBRESÍA -->
+    @if (selectedCustomer) {
+      <nz-divider></nz-divider>
+
+      <div class="form-section">
+        <div class="section-header">
+          <i nz-icon nzType="credit-card" nzTheme="outline" nzSize="lg"></i>
+          <h3>Información de Membresía</h3>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <nz-form-item class="form-item-half">
+              <nz-form-label nzRequired>Puntos Iniciales</nz-form-label>
+              <nz-form-control nzErrorTip="Por favor ingresa un número válido">
+                <nz-input-number
+                  formControlName="totalPoints"
+                  placeholder="0"
+                  nzSize="large"
+                  [nzMin]="0"
+                  [nzStep]="1"
+                  class="form-input-number">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item class="form-item-half">
+              <nz-form-label nzRequired>Estado</nz-form-label>
+              <nz-form-control nzErrorTip="Por favor selecciona un estado">
+                <nz-select
+                  formControlName="status"
+                  nzPlaceHolder="Selecciona el estado"
+                  nzSize="large"
+                  class="form-select">
+                  <nz-option
+                    *ngFor="let opt of statusOptions"
+                    [nzValue]="opt.value"
+                    [nzLabel]="opt.label">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- FOOTER BUTTONS -->
+    <div class="form-footer">
+      <button
+        nz-button
+        nzType="default"
+        nzSize="large"
+        type="button"
+        (click)="onCancel()"
+        class="btn-cancel">
+        <i nz-icon nzType="close" nzTheme="outline"></i>
+        Cancelar
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        nzSize="large"
+        type="button"
+        [disabled]="form.invalid || loading || !selectedCustomer"
+        (click)="onSubmit()"
+        class="btn-submit">
+        <i nz-icon nzType="check" nzTheme="outline"></i>
+        Crear Membresía
+      </button>
+    </div>
+  </form>
+</nz-spin>

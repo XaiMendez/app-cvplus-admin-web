@@ -44,6 +44,16 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
                 <div class="actions-group">
                   <button
                     nz-button
+                    nzType="primary"
+                    nzSize="small"
+                    (click)="edit(item)"
+                    class="btn-edit"
+                    title="Editar membresía">
+                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    <span class="btn-text">Editar</span>
+                  </button>
+                  <button
+                    nz-button
                     nzType="default"
                     nzSize="small"
                     (click)="delete(item)"

@@ -201,7 +201,7 @@ export class SelfRegistrationFormComponent implements OnInit {
 
       if (response.success) {
         this.state = 'success';
-        this.successMessage = `¡Bienvenido/a al Club CV+, ${editedData.name}! 🎉`;
+        this.successMessage = `¡Bienvenido/a al Club CV+, ${editedData.name}! 🎉\nTe hemos enviado un correo a ${editedData.email}`;
       } else {
         this.state = 'error';
         const message = response.message || response?.errors?.[0]?.message;

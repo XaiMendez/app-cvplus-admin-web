@@ -147,7 +147,8 @@ export class MembershipsCreateComponent implements OnInit {
 
     const formValue = this.membershipForm.value;
     const payload = {
-      customer_id: this.customer!.customer_id,
+      customer_id: this.customer!.id,
+      customer_dui: this.customer!.customer_id,
       name: formValue.name,
       email: formValue.email,
       phone: formValue.phone,

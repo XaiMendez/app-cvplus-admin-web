@@ -147,13 +147,16 @@ export class MembershipsCreateComponent implements OnInit {
 
     const formValue = this.membershipForm.value;
     const payload = {
-      customer_id: this.customer.id,
+      customer_id: this.customer!.customer_id,
+      name: formValue.name,
+      email: formValue.email,
+      phone: formValue.phone,
       status: formValue.status,
       total_points: formValue.totalPoints
     };
 
     console.log('🔴 Submitting payload:', payload);
-    this.membershipsService.create(payload).subscribe({
+    this.membershipsService.createSimple(payload).subscribe({
       next: (result) => {
         console.log('🔴 Success:', result);
         this.loading = false;

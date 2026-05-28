@@ -58,6 +58,7 @@ export class SelfRegistrationFormComponent implements OnInit {
   tiers: { label: string; value: string }[] = [];
   errorMessage = '';
   successMessage = '';
+  userEmail = '';
 
   orderStatusOptions = [
     { label: 'Entregado', value: 'Entregado' },
@@ -201,6 +202,7 @@ export class SelfRegistrationFormComponent implements OnInit {
 
       if (response.success) {
         this.state = 'success';
+        this.userEmail = editedData.email;
         this.successMessage = `¡Bienvenido/a al Club CV+, ${editedData.name}! 🎉\nTe hemos enviado un correo a ${editedData.email}`;
       } else {
         this.state = 'error';

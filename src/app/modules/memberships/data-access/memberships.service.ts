@@ -25,6 +25,6 @@ export class MembershipsService extends BaseCrudService<Membership> {
   }
 
   searchCustomerByDui(dui: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/customers/search/${dui}`);
+    return this.http.get<any>(`${this.apiUrl}/odoo-contacts?dui=${dui}`);
   }
 }

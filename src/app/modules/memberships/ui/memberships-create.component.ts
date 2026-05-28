@@ -83,16 +83,34 @@ export class MembershipsCreateComponent implements OnInit {
     this.membershipsService.searchCustomerByDui(dui).subscribe({
       next: (response: any) => {
         console.log('🔴 Search response:', response);
-        if (response.customer) {
-          this.customer = response.customer;
+
+        // El endpoint devuelve un array de contactos
+        const contacts = Array.isArray(response) ? response : response?.result || [];
+
+        if (contacts && contacts.length > 0) {
+          const contact = contacts[0];
+          // Mapear contacto de Odoo a Customer
+          this.customer = {
+            id: contact.id,
+            display_name: contact.name,
+            first_name: contact.name?.split(' ')[0] || '',
+            last_name: contact.name?.split(' ').slice(1).join(' ') || '',
+            email: contact.email || '',
+            phone: contact.phone || '',
+            customer_id: contact.dui || dui,
+            status: 'CREADO',
+            created_at: contact.create_date || new Date().toISOString(),
+            updated_at: contact.create_date || new Date().toISOString()
+          } as Customer;
+
           this.membershipForm.patchValue({
-            name: this.customer!.display_name,
-            email: this.customer!.email,
-            phone: this.customer!.phone
+            name: this.customer.display_name,
+            email: this.customer.email,
+            phone: this.customer.phone
           });
           this.searchError = '';
         } else {
-          this.searchError = response.error || 'Cliente no encontrado';
+          this.searchError = 'Cliente no encontrado con ese DUI';
           this.customer = null;
         }
         this.searching = false;

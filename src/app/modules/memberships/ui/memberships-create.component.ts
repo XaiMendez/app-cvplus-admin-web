@@ -91,7 +91,7 @@ export class MembershipsCreateComponent implements OnInit {
           const contact = contacts[0];
           // Mapear contacto de Odoo a Customer
           this.customer = {
-            id: contact.id,
+            id: contact.id.toString(),
             display_name: contact.name,
             first_name: contact.name?.split(' ')[0] || '',
             last_name: contact.name?.split(' ').slice(1).join(' ') || '',

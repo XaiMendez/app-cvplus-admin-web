@@ -107,6 +107,23 @@ export class App implements OnInit {
     return this.router.url === '/login' || this.router.url === '/self-registration';
   }
 
+  getMenuLabel(label: string): string {
+    const emojiMap: { [key: string]: string } = {
+      'Iniciar Sesión': '🔐 Iniciar Sesión',
+      'Home': '🏠 Home',
+      'Membresías': '💳 Membresías',
+      'Clientes': '👥 Clientes',
+      'Lealtad': '⭐ Lealtad',
+      'Cuentas': '☰ Cuentas',
+      'Reglas': '⚙️ Reglas',
+      'Ayuda': '❓ Ayuda',
+      'Documentación': '📄 Documentación',
+      'Contacto': '📧 Contacto',
+      'Cerrar Sesión': '🚪 Cerrar Sesión'
+    };
+    return emojiMap[label] || label;
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/self-registration']);

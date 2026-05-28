@@ -10,13 +10,11 @@
       <ul nz-menu [nzMode]="'horizontal'" [nzTheme]="'dark'" class="app-menu">
         @for (item of menuItems; track item.label) {
           @if (item.items && item.items.length > 0) {
-            <li nz-submenu [nzTitle]="item.label">
-              <i *ngIf="item.icon" nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+            <li nz-submenu [nzTitle]="getMenuLabel(item.label)">
               <ul>
                 @for (subitem of item.items; track subitem.label) {
                   <li nz-menu-item [routerLink]="subitem.routerLink">
-                    <i *ngIf="subitem.icon" nz-icon [nzType]="subitem.icon" nzTheme="outline"></i>
-                    <span>{{ subitem.label }}</span>
+                    <span>{{ getMenuLabel(subitem.label) }}</span>
                   </li>
                 }
               </ul>
@@ -24,13 +22,11 @@
           } @else {
             @if (item.label === 'Cerrar Sesión') {
               <li nz-menu-item (click)="logout()" class="logout-item">
-                <i *ngIf="item.icon" nz-icon [nzType]="item.icon" nzTheme="outline"></i>
-                <span>{{ item.label }}</span>
+                <span>{{ getMenuLabel(item.label) }}</span>
               </li>
             } @else {
               <li nz-menu-item [routerLink]="item.routerLink">
-                <i *ngIf="item.icon" nz-icon [nzType]="item.icon" nzTheme="outline"></i>
-                <span>{{ item.label }}</span>
+                <span>{{ getMenuLabel(item.label) }}</span>
               </li>
             }
           }

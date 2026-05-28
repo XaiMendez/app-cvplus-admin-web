@@ -23,4 +23,8 @@ export class MembershipsService extends BaseCrudService<Membership> {
   getByCustomerId(customerId: string): Observable<Membership[]> {
     return this.http.get<Membership[]>(`${this.apiUrl}/memberships?internal_customer_id=${customerId}`);
   }
+
+  searchCustomerByDui(dui: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/customers/search/${dui}`);
+  }
 }

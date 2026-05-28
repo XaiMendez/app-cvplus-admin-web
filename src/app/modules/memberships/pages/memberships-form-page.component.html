@@ -1,22 +1,17 @@
-<nz-spin [nzSimple]="true" [nzSpinning]="loading">
-  <nz-page-header
-    [nzTitle]="isEditMode ? '✏️ Editar Membresía' : '➕ Crear Membresía'"
-    nzBackIcon
-    (nzBack)="onFormCancel()">
-  </nz-page-header>
+<div class="page-header">
+  <button nz-button nzType="text" (click)="onFormCancel()" class="back-btn">← Atrás</button>
+  <h1>{{ isEditMode ? '✏️ Editar Membresía' : '➕ Crear Membresía' }}</h1>
+</div>
 
-  <div class="form-container">
-    @if (isEditMode) {
-      <app-memberships-form
-        [membership]="membership"
-        (submit)="onFormSubmit($event)"
-        (cancel)="onFormCancel()">
-      </app-memberships-form>
-    } @else {
-      <app-memberships-create
-        (submit)="onFormSubmit($event)"
-        (cancel)="onFormCancel()">
-      </app-memberships-create>
-    }
-  </div>
-</nz-spin>
+<app-memberships-create
+  *ngIf="!isEditMode"
+  (submit)="onFormSubmit($event)"
+  (cancel)="onFormCancel()">
+</app-memberships-create>
+
+<app-memberships-form
+  *ngIf="isEditMode"
+  [membership]="membership"
+  (submit)="onFormSubmit($event)"
+  (cancel)="onFormCancel()">
+</app-memberships-form>

@@ -1,18 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-// Ant Design Modules
-import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzMessageService } from 'ng-zorro-antd/message';
-
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { MembershipsService } from '../data-access/memberships.service';
 import { Customer } from '../models/membership.model';
 
@@ -22,14 +16,12 @@ import { Customer } from '../models/membership.model';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    NzFormModule,
     NzInputModule,
     NzInputNumberModule,
     NzSelectModule,
     NzButtonModule,
     NzSpinModule,
-    NzIconModule,
-    NzDividerModule
+    NzMessageModule
   ],
   templateUrl: './memberships-create.component.html',
   styleUrl: './memberships-create.component.scss',
@@ -45,11 +37,13 @@ export class MembershipsCreateComponent implements OnInit {
   @Output() submit = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
 
-  form!: FormGroup;
+  searchForm!: FormGroup;
+  membershipForm!: FormGroup;
   loading = false;
-  customers: Customer[] = [];
-  selectedCustomer: Customer | null = null;
-  searchLoading = false;
+  searching = false;
+  customer: Customer | null = null;
+  errorMessage = '';
+  searchError = '';
 
   statusOptions = [
     { label: 'Creado', value: 'CREADO' },
@@ -58,68 +52,103 @@ export class MembershipsCreateComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.initForm();
-    this.loadCustomers();
+    this.initSearchForm();
+    this.initMembershipForm();
   }
 
-  private initForm() {
-    this.form = this.fb.group({
-      customerId: ['', Validators.required],
-      totalPoints: [0, [Validators.required, Validators.min(0)]],
+  private initSearchForm() {
+    this.searchForm = this.fb.group({
+      dui: ['', [Validators.required, Validators.minLength(3)]]
+    });
+  }
+
+  private initMembershipForm() {
+    this.membershipForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      totalPoints: [0, Validators.required],
       status: ['CREADO', Validators.required]
     });
   }
 
-  private loadCustomers() {
-    this.membershipsService.getCustomers().subscribe({
-      next: (data) => {
-        this.customers = data;
+  searchCustomer() {
+    const dui = this.searchForm.get('dui')!.value;
+    console.log('🔴 Searching customer by DUI:', dui);
+
+    this.searching = true;
+    this.searchError = '';
+    this.cdr.markForCheck();
+
+    this.membershipsService.searchCustomerByDui(dui).subscribe({
+      next: (response: any) => {
+        console.log('🔴 Search response:', response);
+        if (response.customer) {
+          this.customer = response.customer;
+          this.membershipForm.patchValue({
+            name: this.customer!.display_name,
+            email: this.customer!.email,
+            phone: this.customer!.phone
+          });
+          this.searchError = '';
+        } else {
+          this.searchError = response.error || 'Cliente no encontrado';
+          this.customer = null;
+        }
+        this.searching = false;
         this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('Error loading customers:', err);
-        this.messageService.error('Error al cargar clientes');
+        console.error('🔴 Search error:', err);
+        this.searching = false;
+        this.searchError = 'Error al buscar cliente';
+        this.customer = null;
+        this.cdr.markForCheck();
       }
     });
   }
 
-  onCustomerSelect(customerId: string) {
-    const customer = this.customers.find(c => c.id === customerId);
-    this.selectedCustomer = customer || null;
-    this.cdr.markForCheck();
-  }
-
   onCancel() {
-    this.form.reset();
-    this.selectedCustomer = null;
+    this.searchForm.reset();
+    this.membershipForm.reset();
+    this.customer = null;
+    this.searchError = '';
+    this.errorMessage = '';
     this.cancel.emit();
   }
 
   onSubmit() {
-    if (this.form.invalid || !this.selectedCustomer) return;
+    console.log('🔴 Submit clicked');
+    if (!this.customer || this.membershipForm.invalid) {
+      console.log('🔴 Missing customer or invalid form');
+      return;
+    }
 
     this.loading = true;
     this.cdr.markForCheck();
 
-    const formValue = this.form.value;
+    const formValue = this.membershipForm.value;
     const payload = {
-      customer_id: this.selectedCustomer.id,
+      customer_id: this.customer.id,
       status: formValue.status,
       total_points: formValue.totalPoints
     };
 
+    console.log('🔴 Submitting payload:', payload);
     this.membershipsService.create(payload).subscribe({
       next: (result) => {
+        console.log('🔴 Success:', result);
         this.loading = false;
         this.cdr.markForCheck();
         this.messageService.success('Membresía creada correctamente');
         this.submit.emit(result);
       },
       error: (err) => {
+        console.error('🔴 Error:', err);
         this.loading = false;
+        this.errorMessage = 'Error al crear membresía';
+        this.messageService.error(this.errorMessage);
         this.cdr.markForCheck();
-        this.messageService.error('Error al crear membresía');
-        console.error('Error:', err);
       }
     });
   }

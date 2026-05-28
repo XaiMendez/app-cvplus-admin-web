@@ -39,10 +39,12 @@ export class MembershipsFormPageComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+    console.log('🔴 MembershipsFormPage ngOnInit, id:', id);
     if (id) {
       this.isEditMode = true;
       this.loadMembership(id);
     }
+    console.log('🔴 isEditMode:', this.isEditMode);
   }
 
   private loadMembership(id: string) {

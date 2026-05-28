@@ -4,7 +4,6 @@
     <!-- SECCIÓN 1: DATOS DEL CLIENTE -->
     <div class="form-section">
       <div class="section-header">
-        <i nz-icon nzType="user" nzTheme="outline" nzSize="lg"></i>
         <h3>Información del Cliente</h3>
       </div>
 
@@ -59,7 +58,6 @@
     <!-- SECCIÓN 2: DATOS DE MEMBRESÍA -->
     <div class="form-section">
       <div class="section-header">
-        <i nz-icon nzType="credit-card" nzTheme="outline" nzSize="lg"></i>
         <h3>Información de Membresía</h3>
       </div>
 
@@ -108,7 +106,6 @@
         type="button"
         (click)="onCancel()"
         class="btn-cancel">
-        <i nz-icon nzType="close" nzTheme="outline"></i>
         Cancelar
       </button>
       <button
@@ -119,7 +116,6 @@
         [disabled]="form.invalid || loading"
         (click)="onSubmit()"
         class="btn-submit">
-        <i nz-icon nzType="check" nzTheme="outline"></i>
         {{ isEditMode ? 'Actualizar' : 'Crear' }}
       </button>
     </div>

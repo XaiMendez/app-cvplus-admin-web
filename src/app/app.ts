@@ -49,55 +49,15 @@ export class App implements OnInit {
 
     this.menuItems = [
       {
-        label: 'Home',
-        icon: 'home',
-        routerLink: ['/memberships']
-      },
-      {
         label: 'Membresías',
-        icon: 'credit-card',
         routerLink: ['/memberships']
       },
       {
         label: 'Clientes',
-        icon: 'team',
         routerLink: ['/customers']
       },
       {
-        label: 'Lealtad',
-        icon: 'star',
-        items: [
-          {
-            label: 'Cuentas',
-            icon: 'menu',
-            routerLink: ['/loyalty/accounts']
-          },
-          {
-            label: 'Reglas',
-            icon: 'setting',
-            routerLink: ['/loyalty/rules']
-          }
-        ]
-      },
-      {
-        label: 'Ayuda',
-        icon: 'question-circle',
-        items: [
-          {
-            label: 'Documentación',
-            icon: 'file',
-            url: '#'
-          },
-          {
-            label: 'Contacto',
-            icon: 'mail',
-            url: '#'
-          }
-        ]
-      },
-      {
         label: 'Cerrar Sesión',
-        icon: 'logout',
         command: () => this.logout()
       }
     ];
@@ -108,20 +68,7 @@ export class App implements OnInit {
   }
 
   getMenuLabel(label: string): string {
-    const emojiMap: { [key: string]: string } = {
-      'Iniciar Sesión': '🔐 Iniciar Sesión',
-      'Home': '🏠 Home',
-      'Membresías': '💳 Membresías',
-      'Clientes': '👥 Clientes',
-      'Lealtad': '⭐ Lealtad',
-      'Cuentas': '☰ Cuentas',
-      'Reglas': '⚙️ Reglas',
-      'Ayuda': '❓ Ayuda',
-      'Documentación': '📄 Documentación',
-      'Contacto': '📧 Contacto',
-      'Cerrar Sesión': '🚪 Cerrar Sesión'
-    };
-    return emojiMap[label] || label;
+    return label;
   }
 
   logout() {

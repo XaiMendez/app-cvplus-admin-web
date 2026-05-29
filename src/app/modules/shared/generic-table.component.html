@@ -1,45 +1,43 @@
-<nz-card class="table-card">
+<div class="table-wrapper">
   <div class="table-header">
     <h3 class="table-title">Datos</h3>
-    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+    <div class="search-box">
       <input
         type="text"
-        nz-input
         placeholder="Buscar..."
         [(ngModel)]="searchValue"
         (ngModelChange)="onSearchChange()"
-        nzSize="large" />
-    </nz-input-group>
-    <ng-template #suffixIconButton>
-      <button nz-button nzType="primary" nzSize="large">
-        <i nz-icon nzType="search"></i>
-      </button>
-    </ng-template>
+        class="search-input" />
+      <button class="search-btn">🔍</button>
+    </div>
   </div>
 
-  <nz-spin [nzSimple]="true" [nzSpinning]="loading">
-    <nz-table nzBordered [nzData]="displayData" nzSize="small" class="striped-table" [nzPageSize]="10" [nzFrontPagination]="true">
+  <div class="table-content" [class.loading]="loading">
+    <div *ngIf="loading" class="spinner">
+      ⏳ Cargando...
+    </div>
+
+    <table class="data-table" *ngIf="!loading && displayData.length > 0">
       <thead>
         <tr>
           <th *ngFor="let col of columns">{{ col.label }}</th>
-          <th style="text-align: center; width: 120px;">Acciones</th>
+          <th *ngIf="showActions" style="text-align: center; width: 120px;">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of displayData; trackBy: trackByRow">
           <td *ngFor="let col of columns">
             <ng-container [ngSwitch]="col.type || 'text'">
-              <nz-tag
+              <span
                 *ngSwitchCase="'status'"
-                [nzColor]="getTagColor(getValue(row, col.key))">
+                class="status-badge"
+                [ngClass]="'status-' + (getValue(row, col.key) || '').toLowerCase()">
                 {{ getValue(row, col.key) ?? '-' }}
-              </nz-tag>
+              </span>
 
               <button
                 *ngSwitchCase="'count'"
-                nz-button
-                nzType="primary"
-                nzSize="small"
+                class="count-button"
                 (click)="onAction('view', row)">
                 Membresías ({{ getMembershipsCount(row) }})
               </button>
@@ -47,16 +45,20 @@
               <span *ngSwitchDefault>{{ getValue(row, col.key) ?? '-' }}</span>
             </ng-container>
           </td>
-          <td style="text-align: center;">
-            <button nz-button nzType="text" nzSize="small" (click)="onAction('edit', row)">
-              <i nz-icon nzType="edit"></i>
+          <td *ngIf="showActions" style="text-align: center;">
+            <button class="action-btn edit-btn" (click)="onAction('edit', row)" title="Editar">
+              ✏️
             </button>
-            <button nz-button nzType="text" nzDanger="true" nzSize="small" (click)="onAction('delete', row)">
-              <i nz-icon nzType="delete"></i>
+            <button class="action-btn delete-btn" (click)="onAction('delete', row)" title="Eliminar">
+              🗑️
             </button>
           </td>
         </tr>
       </tbody>
-    </nz-table>
-  </nz-spin>
-</nz-card>
+    </table>
+
+    <div *ngIf="!loading && displayData.length === 0" class="empty-state">
+      No hay datos disponibles
+    </div>
+  </div>
+</div>

@@ -1,14 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, CUSTOM_ELEMENTS_SCHEMA, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzGridModule } from 'ng-zorro-antd/grid';
 import { FormsModule } from '@angular/forms';
 
 export interface Column {
@@ -23,25 +14,16 @@ export interface Column {
   standalone: true,
   imports: [
     CommonModule,
-    NzTableModule,
-    NzButtonModule,
-    NzInputModule,
-    NzSpinModule,
-    NzTagModule,
-    NzIconModule,
-    NzSpaceModule,
-    NzCardModule,
-    NzGridModule,
     FormsModule
   ],
   templateUrl: './generic-table.component.html',
-  styleUrl: './generic-table.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  styleUrl: './generic-table.component.scss'
 })
 export class GenericTableComponent implements OnInit, OnChanges {
   @Input() data: any[] = [];
   @Input() columns: Column[] = [];
   @Input() loading = false;
+  @Input() showActions = true;
   @Output() actionTriggered = new EventEmitter<{ action: string; row: any }>();
 
   searchValue = '';
@@ -85,7 +67,11 @@ export class GenericTableComponent implements OnInit, OnChanges {
   }
 
   getValue(obj: any, path: string): any {
-    return path.split('.').reduce((acc, key) => acc?.[key], obj);
+    const value = path.split('.').reduce((acc, key) => acc?.[key], obj);
+    if (value === 'false' || value === false || value === null || value === undefined) {
+      return null;
+    }
+    return value;
   }
 
   getMembershipsCount(row: any): number {

@@ -1,25 +1,27 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import {
+  Component, ElementRef, OnDestroy, OnInit, ChangeDetectionStrategy, ViewChild, computed, inject, signal
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ChipModule } from 'primeng/chip';
-import { DividerModule } from 'primeng/divider';
-import { ToastModule } from 'primeng/toast';
-import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { SelfRegistrationService } from '../data-access/self-registration.service';
-import { OdooContact, Tier } from '../models/odoo-contact.model';
+import { ApiError, LookupResult } from '../models/odoo-contact.model';
+import { duiValidator, formatDui } from '../utils/dui.util';
+import { renderTurnstile } from '../utils/turnstile.util';
+import { config } from '../../../../config';
 
 type FormState = 'idle' | 'searching' | 'found' | 'submitting' | 'success' | 'error';
+
+const PHONE_PATTERN = /^[267]\d{3}-?\d{4}$/;
 
 @Component({
   selector: 'app-self-registration-form',
@@ -27,206 +29,194 @@ type FormState = 'idle' | 'searching' | 'found' | 'submitting' | 'success' | 'er
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
-    CalendarModule,
     CardModule,
     MessageModule,
     ProgressSpinnerModule,
-    ChipModule,
-    DividerModule,
-    ToastModule
+    CheckboxModule
   ],
-  providers: [MessageService],
   templateUrl: './self-registration-form.component.html',
   styleUrl: './self-registration-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelfRegistrationFormComponent implements OnInit {
+export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private service = inject(SelfRegistrationService);
-  private cdr = inject(ChangeDetectorRef);
-  private messageService = inject(MessageService);
 
-  state: FormState = 'idle';
+  readonly state = signal<FormState>('idle');
+  readonly lookup = signal<LookupResult | null>(null);
+  readonly errorMessage = signal('');
+  readonly successName = signal('');
+  readonly userEmail = signal('');
+  readonly captchaToken = signal<string | null>(null);
+
+  readonly supportPhone = config.supportPhone;
+  readonly supportWhatsapp = config.supportWhatsapp;
+  readonly termsUrl = config.termsUrl;
+  readonly privacyUrl = config.privacyUrl;
+  readonly captchaRequired = !!config.turnstileSiteKey;
+  readonly captchaPending = computed(() => this.captchaRequired && !this.captchaToken());
+
   searchForm!: FormGroup;
-  membershipForm!: FormGroup;
   editForm!: FormGroup;
-  contact: OdooContact | null = null;
-  tiers: { label: string; value: string }[] = [];
-  errorMessage = '';
-  successMessage = '';
-  userEmail = '';
 
-  orderStatusOptions = [
-    { label: 'Entregado', value: 'Entregado' },
-    { label: 'Pendiente', value: 'Pendiente' },
-    { label: 'Cancelado', value: 'Cancelado' }
-  ];
+  private captcha: { reset: () => void; remove: () => void } | null = null;
 
-  filledFields: Set<string> = new Set();
+  /** El contenedor del CAPTCHA solo existe en las pantallas de búsqueda; se pinta al aparecer. */
+  @ViewChild('captchaHost')
+  set captchaHost(ref: ElementRef<HTMLElement> | undefined) {
+    this.captcha?.remove();
+    this.captcha = null;
+    if (!ref || !this.captchaRequired) return;
+    this.captchaToken.set(null);
+    renderTurnstile(ref.nativeElement, config.turnstileSiteKey, (t) => this.captchaToken.set(t))
+      .then((c) => (this.captcha = c))
+      .catch(() => this.errorMessage.set(this.withSupport('No pudimos cargar la verificación de seguridad. Recarga la página.')));
+  }
 
   ngOnInit() {
-    this.initSearchForm();
-    this.initMembershipForm();
-    this.initEditForm();
-    this.loadTiers();
-  }
-
-  private initSearchForm() {
     this.searchForm = this.fb.group({
-      dui: ['', [Validators.required]]
+      dui: ['', [Validators.required, duiValidator]]
     });
-  }
-
-  private initMembershipForm() {
-    this.membershipForm = this.fb.group({
-      tier_id: ['', Validators.required],
-      end_date: ['', Validators.required],
-      store_name: ['', Validators.required],
-      order_status_name: ['Entregado', Validators.required],
-      label_customer_name: ['', Validators.required]
-    });
-
-    this.setupFormValueTracking();
-  }
-
-  private initEditForm() {
     this.editForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required]
+      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      accepted_terms: [false, Validators.requiredTrue],
+      marketing_consent: [false]
     });
   }
 
-  private populateEditForm() {
-    if (this.contact) {
-      this.editForm.patchValue({
-        name: this.contact.name || '',
-        email: this.contact.email || '',
-        phone: this.contact.phone || ''
-      });
-    }
+  ngOnDestroy() {
+    this.captcha?.remove();
   }
 
-  private setupFormValueTracking() {
-    Object.keys(this.membershipForm.controls).forEach(fieldName => {
-      this.membershipForm.get(fieldName)?.valueChanges.subscribe(value => {
-        if (value !== null && value !== '' && value !== undefined) {
-          this.filledFields.add(fieldName);
-        } else {
-          this.filledFields.delete(fieldName);
-        }
-        this.cdr.markForCheck();
-      });
-
-      const initialValue = this.membershipForm.get(fieldName)?.value;
-      if (initialValue !== null && initialValue !== '' && initialValue !== undefined) {
-        this.filledFields.add(fieldName);
-      }
-    });
+  onDuiInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const formatted = formatDui(input.value);
+    input.value = formatted;
+    this.searchForm.get('dui')?.setValue(formatted, { emitEvent: false });
+    this.searchForm.get('dui')?.updateValueAndValidity({ emitEvent: false });
   }
 
-  private async loadTiers() {
-    try {
-      const tiers = await firstValueFrom(this.service.getTiers());
-      this.tiers = (tiers || []).map((t: any) => ({
-        label: t.name,
-        value: t.id
-      }));
-      this.cdr.markForCheck();
-    } catch (error) {
-      console.error('Error cargando tiers:', error);
-    }
+  onPhoneInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const d = input.value.replace(/\D/g, '').slice(0, 8);
+    const formatted = d.length > 4 ? `${d.slice(0, 4)}-${d.slice(4)}` : d;
+    input.value = formatted;
+    this.editForm.get('phone')?.setValue(formatted, { emitEvent: false });
+    this.editForm.get('phone')?.updateValueAndValidity({ emitEvent: false });
   }
 
   async onSearchContact() {
-    if (this.searchForm.invalid) return;
+    if (this.searchForm.invalid || this.captchaPending() || this.state() === 'searching') return;
 
-    this.state = 'searching';
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.cdr.markForCheck();
+    const captchaToken = this.captchaToken() ?? undefined;
+    this.state.set('searching');
+    this.errorMessage.set('');
 
     try {
-      const dui = this.searchForm.get('dui')?.value;
-      const contacts = await firstValueFrom(this.service.getByDui(dui));
-      this.contact = contacts && contacts.length > 0 ? contacts[0] : null;
-      if (!this.contact) {
-        throw new Error('No se encontró contacto');
-      }
-      this.populateEditForm();
-      this.state = 'found';
-      this.cdr.markForCheck();
-    } catch (error: any) {
-      this.state = 'error';
-      this.errorMessage = 'No encontramos tu DUI en nuestro sistema. Escríbenos al ####### para mayor asistencia.';
-      console.error('Error buscando DUI:', error);
-      this.cdr.markForCheck();
+      const result = await firstValueFrom(this.service.lookup(this.searchForm.get('dui')?.value as string, captchaToken));
+      this.lookup.set(result);
+      this.editForm.reset({ name: '', email: '', phone: '', accepted_terms: false, marketing_consent: false });
+      this.state.set('found');
+    } catch (error) {
+      this.lookup.set(null);
+      this.errorMessage.set(this.searchErrorMessage(error));
+      this.state.set('error');
     }
-  }
-
-  isFieldFilled(fieldName: string): boolean {
-    const value = this.membershipForm.get(fieldName)?.value;
-    return value !== null && value !== '' && value !== undefined;
   }
 
   onReset() {
-    this.state = 'idle';
-    this.contact = null;
-    this.searchForm.reset();
-    this.membershipForm.reset();
-    this.editForm.reset();
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.filledFields.clear();
-    this.cdr.markForCheck();
+    this.state.set('idle');
+    this.lookup.set(null);
+    this.searchForm.reset({ dui: '' });
+    this.editForm.reset({ name: '', email: '', phone: '', accepted_terms: false, marketing_consent: false });
+    this.errorMessage.set('');
+    this.successName.set('');
+    this.userEmail.set('');
   }
 
   async onSubmit() {
-    if (!this.contact || this.editForm.invalid) return;
+    const lookup = this.lookup();
+    if (!lookup || this.editForm.invalid || this.state() === 'submitting') {
+      this.editForm.markAllAsTouched();
+      return;
+    }
 
-    this.state = 'submitting';
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.cdr.markForCheck();
+    this.state.set('submitting');
+    this.errorMessage.set('');
+
+    const value = this.editForm.value;
+    const name = (value.name as string).trim();
+    const email = (value.email as string).trim();
 
     try {
-      const internalCustomerId = this.contact.internal_customer_id || this.contact.id;
-      const editedData: { name: string; email: string; phone: string } = this.editForm.value;
       const response = await firstValueFrom(
-        this.service.createMembership(internalCustomerId, editedData)
+        this.service.createMembership({
+          lookup_token: lookup.lookup_token,
+          name,
+          email,
+          phone: value.phone,
+          accepted_terms: !!value.accepted_terms,
+          marketing_consent: !!value.marketing_consent
+        })
       );
 
       if (response.success) {
-        this.state = 'success';
-        this.userEmail = editedData.email;
-        this.successMessage = `¡Bienvenido/a al Club CV+, ${editedData.name}! 🎉\nTe hemos enviado un correo a ${editedData.email}`;
+        this.successName.set(name);
+        this.userEmail.set(email);
+        this.state.set('success');
       } else {
-        this.state = 'error';
-        const message = response.message || response?.errors?.[0]?.message;
-
-        if (message?.includes('already') || message?.includes('miembro') || message?.includes('ya')) {
-          this.errorMessage = 'Ya eres miembro CV+. Escríbenos al ####### para ayudarte.';
-        } else {
-          this.errorMessage = '¡Casi listo! Hubo un problema al preparar tu Membresía. ¿Prefieres que te ayudemos por WhatsApp? Haz clic aquí o escríbenos al [Número]';
-        }
+        this.failSubmit(response.errors?.[0]);
       }
-      this.cdr.markForCheck();
-    } catch (error: any) {
-      this.state = 'error';
-      const message = error?.error?.message || error?.message || '';
-
-      if (message.includes('already') || message.includes('miembro') || message.includes('ya')) {
-        this.errorMessage = 'Ya eres miembro CV+. Escríbenos al ####### para ayudarte.';
-      } else {
-        this.errorMessage = '¡Casi listo! Hubo un problema al preparar tu Membresía. ¿Prefieres que te ayudemos por WhatsApp? Haz clic aquí o escríbenos al [Número]';
-      }
-
-      console.error('Error creando membresía:', error);
-      this.cdr.markForCheck();
+    } catch (error) {
+      this.failSubmit(this.firstError(error), error instanceof HttpErrorResponse ? error.status : 0);
     }
+  }
+
+  /** Permanece en 'found' (sin perder lo editado), salvo que el token haya expirado. */
+  private failSubmit(err?: ApiError, status = 0) {
+    const code = err?.code;
+
+    if (code === 'LOOKUP_TOKEN_INVALID') {
+      this.onReset();
+      this.errorMessage.set('Tu sesión de registro expiró. Vuelve a ingresar tu DUI.');
+      this.state.set('error');
+      return;
+    }
+
+    this.state.set('found');
+    if (status === 409 || code === 'ALREADY_MEMBER') {
+      this.errorMessage.set(this.withSupport('Ya eres parte de SUMÁS.'));
+    } else if (code === 'CONTACT_MISMATCH') {
+      this.errorMessage.set('El correo o el teléfono no coincide con el que registraste en la óptica. Usa los datos que te mostramos como pista.');
+    } else if (status === 429) {
+      this.errorMessage.set('Hiciste demasiados intentos. Espera un minuto e inténtalo de nuevo.');
+    } else {
+      this.errorMessage.set(this.withSupport('¡Casi listo! Hubo un problema al preparar tu Pase SUMÁS.'));
+    }
+  }
+
+  private searchErrorMessage(error: unknown): string {
+    const status = error instanceof HttpErrorResponse ? error.status : 0;
+    const code = this.firstError(error)?.code;
+
+    if (status === 404 || code === 'DUI_NOT_FOUND') return this.withSupport('No encontramos tu DUI en nuestro sistema.');
+    if (status === 429) return 'Hiciste demasiados intentos. Espera un momento e inténtalo de nuevo.';
+    if (code === 'CAPTCHA_FAILED') return 'No pudimos verificar que eres una persona. Inténtalo de nuevo.';
+    return this.withSupport('No pudimos consultar tu DUI en este momento. Intenta de nuevo en unos minutos.');
+  }
+
+  private firstError(error: unknown): ApiError | undefined {
+    if (error instanceof HttpErrorResponse) {
+      return error.error?.errors?.[0] ?? (error.error?.code ? { message: error.error.message, code: error.error.code } : undefined);
+    }
+    return undefined;
+  }
+
+  private withSupport(text: string): string {
+    return this.supportPhone ? `${text} Escríbenos al ${this.supportPhone} para ayudarte.` : text;
   }
 }

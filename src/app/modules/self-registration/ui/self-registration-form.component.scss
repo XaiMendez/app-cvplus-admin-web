@@ -486,3 +486,228 @@
     }
   }
 }
+
+.field-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.field-error {
+  display: block;
+  color: #b3261e;
+  font-size: 0.8125rem;
+  margin-top: 0.25rem;
+  min-height: 1em;
+}
+
+.support-link {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.consent-group {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .consent-item {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+
+    label { cursor: pointer; }
+  }
+}
+
+/* ===== Marca SUMÁS ===== */
+.self-registration-page {
+  --sumas-teal: #00abc8; /* Tiffany Blue */
+  --sumas-celadon: #0083ad; /* Celadon Blue */
+  --sumas-mango: #ffc629; /* Ripe Mango */
+  --sumas-onyx: #373a36; /* Onyx */
+  --sumas-teal-dark: #0083ad; /* Celadon Blue exacto del manual (contraste con blanco ~4,3:1) */
+  --sumas-cream: #fff3d1;
+  --primary-color: var(--sumas-teal-dark);
+  --primary-dark: #006a8c;
+  background-color: #f2f4f6;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--sumas-onyx);
+
+  h1, .card-title {
+    font-family: 'Bebas Neue', 'Montserrat', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  h1 { font-size: 2.25rem; line-height: 1.1; color: var(--sumas-celadon); }
+  .card-title { font-size: 1.5rem; }
+}
+
+.brand-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  .logo-sumas {
+    display: block;
+    width: 230px;
+    max-width: 72%;
+    height: auto;
+    margin: 0 auto;
+  }
+}
+
+.brand-footer {
+  text-align: center;
+  margin-top: 2rem;
+
+  .logo-cv {
+    display: block;
+    width: 150px;
+    max-width: 50%;
+    height: auto;
+    margin: 0 auto;
+  }
+}
+
+.page-content.narrow { max-width: 600px; }
+
+.card-title {
+  margin: 0 0 1rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.benefits-card { display: block; margin-bottom: 1rem; }
+
+.benefit-ico {
+  flex: 0 0 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+
+  font-size: 1.15rem;
+
+  &.ico-1 { background: #e2f5fa; color: var(--sumas-celadon); }
+  &.ico-2 { background: #fff1c2; color: #a87a00; }
+  &.ico-3 { background: #e2f5fa; color: var(--sumas-celadon); }
+}
+
+.hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--surface-600);
+}
+
+.example {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--surface-600);
+}
+
+.dui-input {
+  font-size: 1.0625rem;
+  letter-spacing: 0.04em;
+  border: 2px solid var(--sumas-teal) !important;
+}
+
+.name-accent {
+  color: var(--sumas-teal-dark);
+  text-transform: uppercase;
+}
+
+.success-hero {
+  background: var(--sumas-teal);
+  color: #fff;
+  color: #fff;
+  text-align: center;
+  padding: 1.75rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+
+  h1 { margin: 0 0 0.25rem; font-size: 2rem; text-transform: uppercase; color: #fff; }
+  p { margin: 0; font-weight: 500; }
+
+  .success-check {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--sumas-teal-dark);
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+  }
+}
+
+.gift {
+  background: var(--sumas-mango);
+  color: var(--sumas-onyx);
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+
+  .pi { font-size: 1.5rem; }
+}
+
+.steps {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+
+  li { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.75rem; }
+
+  .n {
+    flex: 0 0 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--sumas-teal-dark);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+:host ::ng-deep .p-button:not(.p-button-text) {
+  /* Texto blanco sobre --primary-dark (#006a8c): contraste ~6:1 (WCAG AA). Con #0083ad quedaba en ~4,3:1. */
+  background: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+  box-shadow: none !important;
+}
+
+.captcha-host {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  min-height: 65px;
+}
+
+.legal {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--surface-600);
+
+  a {
+    color: var(--sumas-teal-dark);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+}

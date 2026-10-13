@@ -161,14 +161,14 @@
 
           <div class="consent-group">
             <div class="consent-item">
-              <p-checkbox inputId="accepted_terms" formControlName="accepted_terms" [binary]="true"></p-checkbox>
+              <input type="checkbox" id="accepted_terms" class="consent-box" formControlName="accepted_terms" />
               <label for="accepted_terms">
                 Soy mayor de edad y acepto los <a [href]="termsUrl" target="_blank" rel="noopener">Términos y Condiciones</a>
                 y la <a [href]="privacyUrl" target="_blank" rel="noopener">Política de Privacidad</a> de SUMÁS.
               </label>
             </div>
             <div class="consent-item">
-              <p-checkbox inputId="marketing_consent" formControlName="marketing_consent" [binary]="true"></p-checkbox>
+              <input type="checkbox" id="marketing_consent" class="consent-box" formControlName="marketing_consent" />
               <label for="marketing_consent">
                 (Opcional) Acepto recibir promociones y novedades de SUMÁS por WhatsApp, llamada y correo.
               </label>

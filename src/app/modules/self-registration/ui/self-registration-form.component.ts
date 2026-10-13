@@ -11,7 +11,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { CheckboxModule } from 'primeng/checkbox';
 
 import { SelfRegistrationService } from '../data-access/self-registration.service';
 import { ApiError, LookupResult } from '../models/odoo-contact.model';
@@ -33,8 +32,7 @@ const PHONE_PATTERN = /^[267]\d{3}-?\d{4}$/;
     InputTextModule,
     CardModule,
     MessageModule,
-    ProgressSpinnerModule,
-    CheckboxModule
+    ProgressSpinnerModule
   ],
   templateUrl: './self-registration-form.component.html',
   styleUrl: './self-registration-form.component.scss',
@@ -204,7 +202,8 @@ export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
     const code = this.firstError(error)?.code;
 
     if (status === 404 || code === 'DUI_NOT_FOUND') return this.withSupport('No encontramos tu DUI en nuestro sistema.');
-    if (status === 429) return 'Hiciste demasiados intentos. Espera un momento e inténtalo de nuevo.';
+    if (code === 'TOO_MANY_ATTEMPTS') return this.withSupport('Hiciste varios intentos que no coincidieron. Inténtalo de nuevo en un rato.');
+    if (status === 429) return 'Hiciste demasiados intentos. Espera un minuto e inténtalo de nuevo.';
     if (code === 'CAPTCHA_FAILED') return 'No pudimos verificar que eres una persona. Inténtalo de nuevo.';
     return this.withSupport('No pudimos consultar tu DUI en este momento. Intenta de nuevo en unos minutos.');
   }

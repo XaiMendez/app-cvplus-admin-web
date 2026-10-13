@@ -521,6 +521,16 @@
 
     label { cursor: pointer; }
   }
+
+  /* Casilla nativa: no depende de ningún tema de PrimeNG. */
+  .consent-box {
+    flex: 0 0 auto;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.1rem 0 0;
+    cursor: pointer;
+    accent-color: var(--primary-dark);
+  }
 }
 
 /* ===== Marca SUMÁS ===== */

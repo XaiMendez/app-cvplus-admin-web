@@ -1,10 +1,10 @@
-/** Respuesta de POST /self-registration/lookup: nunca incluye datos personales completos. */
+/** Respuesta de POST /self-registration/lookup. */
 export interface LookupResult {
   lookup_token: string;
-  masked_name: string;
-  masked_dui: string;
-  email_hint: string;
-  phone_hint: string;
+  name: string;
+  email: string;
+  phone: string;
+  dui: string;
 }
 
 export interface EnrollPayload {

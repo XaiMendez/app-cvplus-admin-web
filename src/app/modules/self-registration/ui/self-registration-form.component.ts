@@ -20,8 +20,6 @@ import { config } from '../../../../config';
 
 type FormState = 'idle' | 'searching' | 'found' | 'submitting' | 'success' | 'error';
 
-const PHONE_PATTERN = /^[267]\d{3}-?\d{4}$/;
-
 @Component({
   selector: 'app-self-registration-form',
   standalone: true,
@@ -78,9 +76,10 @@ export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
       dui: ['', [Validators.required, duiValidator]]
     });
     this.editForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      // Sin validación: se muestra lo que devuelve la API (el cliente puede corregirlo).
+      name: [''],
+      email: [''],
+      phone: [''],
       accepted_terms: [false, Validators.requiredTrue],
       marketing_consent: [false]
     });
@@ -117,7 +116,13 @@ export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
     try {
       const result = await firstValueFrom(this.service.lookup(this.searchForm.get('dui')?.value as string, captchaToken));
       this.lookup.set(result);
-      this.editForm.reset({ name: '', email: '', phone: '', accepted_terms: false, marketing_consent: false });
+      this.editForm.reset({
+        name: result.name || '',
+        email: result.email || '',
+        phone: result.phone || '',
+        accepted_terms: false,
+        marketing_consent: false
+      });
       this.state.set('found');
     } catch (error) {
       this.lookup.set(null);
@@ -178,6 +183,12 @@ export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
   private failSubmit(err?: ApiError, status = 0) {
     const code = err?.code;
 
+    if (code === 'EMAIL_REQUIRED') {
+      this.state.set('found');
+      this.errorMessage.set('Necesitamos un correo para enviarte el pase. Escríbelo en el campo Correo.');
+      return;
+    }
+
     if (code === 'LOOKUP_TOKEN_INVALID') {
       this.onReset();
       this.errorMessage.set('Tu sesión de registro expiró. Vuelve a ingresar tu DUI.');
@@ -189,7 +200,7 @@ export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
     if (status === 409 || code === 'ALREADY_MEMBER') {
       this.errorMessage.set(this.withSupport('Ya eres parte de SUMÁS.'));
     } else if (code === 'CONTACT_MISMATCH') {
-      this.errorMessage.set('El correo o el teléfono no coincide con el que registraste en la óptica. Usa los datos que te mostramos como pista.');
+      this.errorMessage.set('El correo o el teléfono no coincide con el que registraste en la óptica. Revisa los datos.');
     } else if (status === 429) {
       this.errorMessage.set('Hiciste demasiados intentos. Espera un minuto e inténtalo de nuevo.');
     } else {

@@ -441,10 +441,68 @@
   .link-btn::before { display: none; }
 
   .p-button,
-  .p-button:hover:not(:disabled),
-  .p-button:active {
+  .p-button:hover:not(:disabled) {
     transform: none !important;
     letter-spacing: 0;
   }
+  .p-button:active:not(:disabled) { transform: scale(0.98) !important; }
   .p-button::before { display: none; }
+}
+
+
+/* ===== Animaciones (cortas; solo opacidad y posición) ===== */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pop {
+  0%   { opacity: 0; transform: scale(0.5); }
+  70%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* Cada pantalla entra suavemente (el @if la vuelve a crear al cambiar de estado). */
+.shell { animation: fade-up 0.25s ease-out both; }
+
+/* Pantalla 1: los beneficios aparecen uno tras otro. */
+.benefit-item { animation: fade-up 0.35s ease-out both; }
+.benefit-item:nth-child(2) { animation-delay: 0.08s; }
+.benefit-item:nth-child(3) { animation-delay: 0.16s; }
+
+/* Pantalla 3: el círculo rebota y el check se dibuja. */
+.success-check { animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both; }
+.success-check .check-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 0.4s ease-out 0.4s forwards;
+}
+.gift { animation: fade-up 0.35s ease-out 0.5s both; }
+
+/* Botón: cambio de color suave al activarse. */
+:host ::ng-deep .btn-wrap .p-button { transition: background-color 0.25s ease, transform 0.1s ease !important; }
+
+/* Quien pidió "reducir movimiento" en su dispositivo ve todo sin animar. */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.55; transform: scale(0.97); }
+  50%      { opacity: 1;    transform: scale(1); }
+}
+
+/* Error de búsqueda: el campo del DUI tiembla una vez (la pantalla se vuelve a crear en cada error, así que se repite). */
+.dui-input.shake { animation: shake 0.4s ease-in-out; }
+
+/* Carga: el logo late suavemente en lugar del círculo giratorio. */
+.loading-logo { display: block; width: 180px; max-width: 60%; height: auto; animation: pulse 1.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dui-input.shake { animation: none !important; }
+  .loading-logo { animation: none !important; }
+  .shell, .benefit-item, .success-check, .gift { animation: none !important; }
+  .success-check .check-path { animation: none !important; stroke-dashoffset: 0; }
+  :host ::ng-deep .btn-wrap .p-button { transition: none !important; }
 }

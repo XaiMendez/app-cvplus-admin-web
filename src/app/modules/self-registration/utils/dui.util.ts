@@ -6,13 +6,10 @@ export function formatDui(raw: string): string {
   return d.length > 8 ? `${d.slice(0, 8)}-${d.slice(8)}` : d;
 }
 
-/** Valida el dígito verificador del DUI (módulo 10, pesos 9..2). */
+/** Solo revisa el formato: 9 dígitos y que no sea todo ceros. NO valida el dígito verificador (la existencia la confirma Odoo). */
 export function isValidDui(value: string): boolean {
   const d = (value || '').replace(/\D/g, '');
-  if (d.length !== 9 || /^0+$/.test(d)) return false;
-  let sum = 0;
-  for (let i = 0; i < 8; i++) sum += Number(d[i]) * (9 - i);
-  return (10 - (sum % 10)) % 10 === Number(d[8]);
+  return d.length === 9 && !/^0+$/.test(d);
 }
 
 export function duiValidator(control: AbstractControl): ValidationErrors | null {

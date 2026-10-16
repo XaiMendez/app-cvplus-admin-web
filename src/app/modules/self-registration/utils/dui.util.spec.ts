@@ -19,12 +19,12 @@ describe('formatDui', () => {
 });
 
 describe('isValidDui', () => {
-  it('acepta un DUI con dígito verificador correcto', () => {
+  it('acepta 9 dígitos, con o sin guion', () => {
     expect(isValidDui('01234567-8')).toBe(true);
     expect(isValidDui('012345678')).toBe(true);
   });
-  it('rechaza dígito verificador incorrecto', () => {
-    expect(isValidDui('01234567-9')).toBe(false);
+  it('no revisa el dígito verificador', () => {
+    expect(isValidDui('01234567-9')).toBe(true);
   });
   it('rechaza longitud incorrecta', () => {
     expect(isValidDui('0123456-7')).toBe(false);
@@ -40,8 +40,8 @@ describe('duiValidator', () => {
   it('no marca error en vacío (lo cubre required)', () => {
     expect(duiValidator(new FormControl(''))).toBeNull();
   });
-  it('marca error si el verificador no coincide', () => {
-    expect(duiValidator(new FormControl('01234567-9'))).toEqual({ dui: true });
+  it('marca error si la longitud es incorrecta', () => {
+    expect(duiValidator(new FormControl('0123456-7'))).toEqual({ dui: true });
   });
   it('pasa con un DUI válido', () => {
     expect(duiValidator(new FormControl('01234567-8'))).toBeNull();

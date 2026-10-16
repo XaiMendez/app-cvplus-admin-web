@@ -54,7 +54,7 @@
               formControlName="dui"
               (input)="onDuiInput($event)"
               placeholder="00000000-0"
-              class="field-input dui-input"
+              class="field-input dui-input" [class.shake]="state() === 'error'"
               [attr.aria-invalid]="searchForm.get('dui')?.errors && searchForm.get('dui')?.dirty ? 'true' : null"
               aria-describedby="dui-help dui-error"
             />
@@ -96,7 +96,7 @@
   @if (state() === 'searching') {
     <div class="shell shell--center">
       <div class="loading-state" role="status">
-        <p-progressSpinner [style]="{ width: '50px', height: '50px' }" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+        <img class="loading-logo" src="img/sumas-logo.png" alt="" />
         <p>Buscando tu DUI...</p>
       </div>
     </div>
@@ -178,7 +178,7 @@
   @if (state() === 'submitting') {
     <div class="shell shell--center">
       <div class="loading-state" role="status">
-        <p-progressSpinner [style]="{ width: '50px', height: '50px' }" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+        <img class="loading-logo" src="img/sumas-logo.png" alt="" />
         <p>Preparando tu Pase SUMÁS...</p>
       </div>
     </div>
@@ -192,7 +192,9 @@
       </header>
 
       <section class="success-hero">
-        <div class="success-check" aria-hidden="true"><i class="pi pi-check"></i></div>
+        <div class="success-check" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="check-path" pathLength="1" d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+        </div>
         <h1>¡Ya eres parte de SUMÁS!</h1>
         <p>{{ successName() }}</p>
       </section>

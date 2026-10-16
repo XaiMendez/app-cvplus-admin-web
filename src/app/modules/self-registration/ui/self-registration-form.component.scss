@@ -115,7 +115,7 @@
 
   div { flex: 1; min-width: 0; }
 
-  strong {
+  div strong {
     display: block;
     margin-bottom: 0.125rem;
     font-size: 0.9375rem;
@@ -123,7 +123,8 @@
     color: var(--sumas-ink);
   }
 
-  span {
+  /* Solo el texto descriptivo: antes también alcanzaba al cuadrito del icono y le quitaba el centrado. */
+  div span {
     display: block;
     font-size: 0.875rem;
     line-height: 1.5;
@@ -403,4 +404,47 @@
   p { margin: 0 0 0.5rem; &:last-child { margin: 0; } }
   .help-title { font-weight: 700; color: var(--sumas-ink); }
   a { color: var(--sumas-link); font-weight: 600; }
+}
+
+/* ===== Anulan los estilos globales de src/styles.css (label en mayúsculas, botones con degradado y salto al pasar el mouse) ===== */
+.self-registration-page {
+  label {
+    margin: 0;
+    font-size: inherit;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: inherit;
+  }
+  .info-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sumas-ink); }
+  .card-title { font-size: 1.125rem; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--sumas-ink); margin: 0 0 1rem; }
+  .card-title--sm { margin-bottom: 0.25rem; }
+
+  .link-btn,
+  .link-btn:hover,
+  .link-btn:active {
+    display: block !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 1rem auto 0;
+    padding: 0.5rem 1rem !important;
+    background: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    color: var(--sumas-link) !important;
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0;
+    overflow: visible;
+  }
+  .link-btn:hover { text-decoration: underline; }
+  .link-btn::before { display: none; }
+
+  .p-button,
+  .p-button:hover:not(:disabled),
+  .p-button:active {
+    transform: none !important;
+    letter-spacing: 0;
+  }
+  .p-button::before { display: none; }
 }

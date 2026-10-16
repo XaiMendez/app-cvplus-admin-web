@@ -1,71 +1,69 @@
 <div class="self-registration-page">
-  <!-- IDLE & ERROR STATE - Búsqueda -->
-  @if (state() === 'idle' || state() === 'error') {
-    <div class="page-content-centered">
-      <div class="search-section">
-        <header class="brand-header">
-          <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
-        </header>
 
-        <!-- Benefits -->
-        <p-card class="benefits-card">
+  <!-- IDLE & ERROR - Pantalla 1: bienvenida e ingreso del DUI -->
+  @if (state() === 'idle' || state() === 'error') {
+    <div class="shell shell--tinted">
+      <header class="brand-header">
+        <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
+        <p class="brand-tagline">SUMÁS · Tu programa de lealtad</p>
+      </header>
+
+      <main class="shell-body">
+        <section class="card">
           <h2 class="card-title">¿Qué ganas con SUMÁS?</h2>
           <div class="benefits-list">
             <div class="benefit-item">
-              <span class="benefit-ico" aria-hidden="true"><img src="img/icon-star.png" alt="" width="48" height="48" /></span>
+              <span class="benefit-ico benefit-ico--star" aria-hidden="true"><img src="img/icon-star.png" alt="" /></span>
               <div>
                 <strong>Acumula puntos en cada compra</strong>
                 <span>1 punto por cada $1 que pagas en nuestras sucursales.</span>
               </div>
             </div>
             <div class="benefit-item">
-              <span class="benefit-ico" aria-hidden="true"><img src="img/icon-gift.png" alt="" width="48" height="48" /></span>
+              <span class="benefit-ico benefit-ico--gift" aria-hidden="true"><img src="img/icon-gift.png" alt="" /></span>
               <div>
                 <strong>Desbloquea descuentos</strong>
                 <span>Hasta 25% (máximo $150 por compra) en tu próxima compra.</span>
               </div>
             </div>
             <div class="benefit-item">
-              <span class="benefit-ico" aria-hidden="true"><img src="img/icon-mobile.png" alt="" width="48" height="48" /></span>
+              <span class="benefit-ico benefit-ico--phone" aria-hidden="true"><img src="img/icon-mobile.png" alt="" /></span>
               <div>
                 <strong>Sin costo y sin app</strong>
                 <span>Es gratis y guardas tu Pase en Apple Wallet o Google Wallet.</span>
               </div>
             </div>
           </div>
-        </p-card>
+        </section>
 
-        <!-- Búsqueda -->
-        <p-card class="search-card">
+        <section class="card">
           @if (state() === 'error') {
             <p-message severity="error" [text]="errorMessage()" styleClass="w-full mb-4" role="alert"></p-message>
           }
 
           <form [formGroup]="searchForm" (ngSubmit)="onSearchContact()">
-            <div class="form-group">
-              <label for="dui" class="field-label">Ingresa tu DUI</label>
-              <p class="hint">Para identificarte en nuestras sucursales.</p>
-              <input
-                pInputText
-                id="dui"
-                type="text"
-                inputmode="numeric"
-                autocomplete="off"
-                maxlength="10"
-                formControlName="dui"
-                (input)="onDuiInput($event)"
-                placeholder="00000000-0"
-                class="w-full dui-input"
-                [attr.aria-invalid]="searchForm.get('dui')?.errors && searchForm.get('dui')?.dirty ? 'true' : null"
-                aria-describedby="dui-help dui-error"
-              />
-              <small id="dui-help" class="example">Ej: 01234567-8 · Solo números y guión</small>
-              <small id="dui-error" class="field-error" role="alert">
-                @if (searchForm.get('dui')?.hasError('dui') && searchForm.get('dui')?.value?.length === 10) {
-                  Revisa tu DUI, el número no es válido.
-                }
-              </small>
-            </div>
+            <label for="dui" class="card-title card-title--sm">Ingresa tu DUI</label>
+            <p class="hint">Para identificarte en nuestras sucursales.</p>
+            <input
+              pInputText
+              id="dui"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              maxlength="10"
+              formControlName="dui"
+              (input)="onDuiInput($event)"
+              placeholder="00000000-0"
+              class="field-input dui-input"
+              [attr.aria-invalid]="searchForm.get('dui')?.errors && searchForm.get('dui')?.dirty ? 'true' : null"
+              aria-describedby="dui-help dui-error"
+            />
+            <small id="dui-help" class="example">Ej: 01234567-8 · Solo números y guión</small>
+            <small id="dui-error" class="field-error" role="alert">
+              @if (searchForm.get('dui')?.hasError('dui') && searchForm.get('dui')?.value?.length === 10) {
+                Revisa tu DUI, el número no es válido.
+              }
+            </small>
 
             @if (captchaRequired) {
               <div #captchaHost class="captcha-host"></div>
@@ -75,7 +73,8 @@
               type="submit"
               label="Activar mi SUMÁS"
               [disabled]="searchForm.invalid || captchaPending()"
-              class="w-full mt-4"
+              styleClass="btn-main"
+              class="btn-wrap"
             ></p-button>
 
             <p class="legal">
@@ -84,64 +83,62 @@
               <a [href]="privacyUrl" target="_blank" rel="noopener">Política de Privacidad</a> del programa.
             </p>
           </form>
-        </p-card>
+        </section>
+      </main>
 
-        <footer class="brand-footer">
-          <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
-        </footer>
-      </div>
+      <footer class="brand-footer">
+        <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
+      </footer>
     </div>
   }
 
-  <!-- SEARCHING STATE -->
+  <!-- SEARCHING -->
   @if (state() === 'searching') {
-    <div class="page-content-centered">
+    <div class="shell shell--center">
       <div class="loading-state" role="status">
         <p-progressSpinner [style]="{ width: '50px', height: '50px' }" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
-        <p class="mt-4 text-center">Buscando tu DUI...</p>
+        <p>Buscando tu DUI...</p>
       </div>
     </div>
   }
 
-  <!-- FOUND STATE - Datos del usuario -->
+  <!-- FOUND - Pantalla 2: datos del usuario -->
   @if (state() === 'found') {
-    <div class="page-content narrow">
+    <div class="shell">
       <header class="brand-header">
         <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
       </header>
 
-      <div class="section-header">
-        <h1>¡Ya casi tienes tu Pase SUMÁS,<br /><span class="name-accent">{{ lookup()?.name }}</span>!</h1>
-        <p class="subtitle-main">Confirma que tus datos están correctos y recibe tu pase al instante.</p>
-      </div>
+      <main class="shell-body">
+        <div class="section-header">
+          <h1>¡Ya casi tienes tu Pase SUMÁS, <span class="name-accent">{{ lookup()?.name }}</span>!</h1>
+          <p class="subtitle-main">Confirma que tus datos están correctos y recibe tu pase al instante.</p>
+        </div>
 
-      @if (errorMessage()) {
-        <p-message severity="error" [text]="errorMessage()" styleClass="w-full mb-4 error-alert" role="alert"></p-message>
-        @if (supportWhatsapp) {
-          <p class="support-link"><a [href]="supportWhatsapp" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></p>
+        @if (errorMessage()) {
+          <p-message severity="error" [text]="errorMessage()" styleClass="w-full mb-4 error-alert" role="alert"></p-message>
+          @if (supportWhatsapp) {
+            <p class="support-link"><a [href]="supportWhatsapp" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></p>
+          }
         }
-      }
 
-      <p-card class="client-card">
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()" novalidate>
-          <div class="client-info-grid">
-            <div class="info-item info-item--wide">
-              <label for="name" class="info-label">Nombre</label>
-              <input pInputText id="name" formControlName="name" autocomplete="name" class="w-full" placeholder="Tu nombre completo" />
-            </div>
-            <div class="info-item info-item--wide">
-              <label for="email" class="info-label">Correo</label>
-              <input pInputText id="email" type="email" formControlName="email" autocomplete="email" class="w-full" placeholder="tu@email.com" />
-            </div>
-            <div class="info-item">
-              <label for="phone" class="info-label">Teléfono</label>
-              <input pInputText id="phone" type="tel" inputmode="numeric" maxlength="9" formControlName="phone" (input)="onPhoneInput($event)" autocomplete="tel" class="w-full" placeholder="7123-4567" />
-            </div>
-            <div class="info-item">
-              <span class="info-label">DUI</span>
-              <span class="info-value">{{ lookup()?.dui }}</span>
-              <small class="example">Tu DUI identifica tu cuenta y no se puede cambiar.</small>
-            </div>
+          <div class="info-item">
+            <label for="name" class="info-label">Nombre</label>
+            <input pInputText id="name" formControlName="name" autocomplete="name" class="field-input" placeholder="Tu nombre completo" />
+          </div>
+          <div class="info-item">
+            <label for="email" class="info-label">Correo</label>
+            <input pInputText id="email" type="email" formControlName="email" autocomplete="email" class="field-input" placeholder="tu@email.com" />
+          </div>
+          <div class="info-item">
+            <label for="phone" class="info-label">Teléfono</label>
+            <input pInputText id="phone" type="tel" inputmode="numeric" maxlength="9" formControlName="phone" (input)="onPhoneInput($event)" autocomplete="tel" class="field-input" placeholder="7123-4567" />
+          </div>
+          <div class="info-item">
+            <span class="info-label">DUI</span>
+            <span class="field-input field-input--readonly">{{ lookup()?.dui }}</span>
+            <small class="example">Tu DUI identifica tu cuenta y no se puede cambiar.</small>
           </div>
 
           <div class="consent-group">
@@ -159,26 +156,17 @@
               </label>
             </div>
           </div>
-        </form>
-      </p-card>
 
-      <div class="action-buttons">
-        <p-button
-          type="button"
-          label="← Volver"
-          severity="secondary"
-          (click)="onReset()"
-          [text]="true"
-          class="p-button-lg"
-        ></p-button>
-        <p-button
-          type="button"
-          label="Confirmar y recibir mi Pase"
-          (click)="onSubmit()"
-          [disabled]="editForm.invalid"
-          class="p-button-lg"
-        ></p-button>
-      </div>
+          <p-button
+            type="submit"
+            label="Confirmar y recibir mi Pase"
+            [disabled]="editForm.invalid"
+            styleClass="btn-main"
+            class="btn-wrap"
+          ></p-button>
+          <button type="button" class="link-btn" (click)="onReset()">← Volver</button>
+        </form>
+      </main>
 
       <footer class="brand-footer">
         <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
@@ -186,66 +174,62 @@
     </div>
   }
 
-  <!-- SUBMITTING STATE -->
+  <!-- SUBMITTING -->
   @if (state() === 'submitting') {
-    <div class="page-content-centered">
+    <div class="shell shell--center">
       <div class="loading-state" role="status">
         <p-progressSpinner [style]="{ width: '50px', height: '50px' }" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
-        <p class="mt-4 text-center">Preparando tu Pase SUMÁS...</p>
+        <p>Preparando tu Pase SUMÁS...</p>
       </div>
     </div>
   }
 
-  <!-- SUCCESS STATE - Confirmación -->
+  <!-- SUCCESS - Pantalla 3: confirmación -->
   @if (state() === 'success') {
-    <div class="page-content-centered">
-      <div class="success-section">
-        <header class="brand-header">
-          <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
-        </header>
+    <div class="shell">
+      <header class="brand-header">
+        <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
+      </header>
 
-        <p-card class="success-card">
-          <div class="success-hero">
-            <div class="success-check" aria-hidden="true"><i class="pi pi-check"></i></div>
-            <h1>¡Ya eres parte de SUMÁS!</h1>
-            <p>{{ successName() }}</p>
-          </div>
+      <section class="success-hero">
+        <div class="success-check" aria-hidden="true"><i class="pi pi-check"></i></div>
+        <h1>¡Ya eres parte de SUMÁS!</h1>
+        <p>{{ successName() }}</p>
+      </section>
 
-          <div class="gift"><img src="img/icon-gift.png" alt="" width="44" height="44" /><span>Tu Pase SUMÁS ya está listo</span></div>
+      <main class="shell-body">
+        <div class="gift"><img src="img/icon-gift.png" alt="" /><span>Tu Pase SUMÁS ya está listo</span></div>
 
-          <p class="success-body">
-            Te estamos enviando tu pase digital a <strong>{{ userEmail() }}</strong>.
-            Ábrelo y toca <strong>«Guardar en teléfono»</strong> — listo, sin app.
+        <p class="success-body">
+          Te enviamos tu pase digital a <strong>{{ userEmail() }}</strong>.
+          Ábrelo y toca <strong>«Guardar en teléfono»</strong> — listo, sin app.
+        </p>
+
+        <ol class="steps">
+          <li><span class="n">1</span><span>Abre el correo desde <strong>{{ userEmail() }}</strong></span></li>
+          <li><span class="n">2</span><span>Toca el botón <strong>«Guardar en teléfono»</strong></span></li>
+          <li><span class="n">3</span><span>¡Empieza a acumular 1 punto por cada $1 en tus compras!</span></li>
+        </ol>
+
+        <div class="help-section">
+          <p class="help-title">¿No encuentras el correo?</p>
+          <p>Revisa la carpeta de Promociones o Spam.</p>
+          <p>
+            ¿Necesitas ayuda?
+            @if (supportWhatsapp) {
+              <a [href]="supportWhatsapp" target="_blank" rel="noopener">Escríbenos por WhatsApp</a> o visita cualquiera de nuestras sucursales.
+            } @else {
+              Escríbenos por WhatsApp o visita cualquiera de nuestras sucursales.
+            }
           </p>
+        </div>
 
-          <ol class="steps">
-            <li><span class="n">1</span><span>Abre el correo que te enviamos.</span></li>
-            <li><span class="n">2</span><span>Toca el botón <strong>«Guardar en teléfono»</strong>.</span></li>
-            <li><span class="n">3</span><span>¡Empieza a acumular 1 punto por cada $1 en tus compras!</span></li>
-          </ol>
+        <button type="button" class="link-btn" (click)="onReset()">Volver al inicio</button>
+      </main>
 
-          <div class="help-section">
-            <p class="help-title">¿No encuentras el correo?</p>
-            <p>Revisa la carpeta de Promociones o Spam.</p>
-            <p>
-              ¿Necesitas ayuda?
-              @if (supportWhatsapp) {
-                <a [href]="supportWhatsapp" target="_blank" rel="noopener">Escríbenos por WhatsApp</a> o visita cualquiera de nuestras sucursales.
-              } @else {
-                Escríbenos por WhatsApp o visita cualquiera de nuestras sucursales.
-              }
-            </p>
-          </div>
-
-          <div class="action-buttons mt-6">
-            <p-button type="button" label="Volver al inicio" (click)="onReset()" class="p-button-lg"></p-button>
-          </div>
-        </p-card>
-
-        <footer class="brand-footer">
-          <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
-        </footer>
-      </div>
+      <footer class="brand-footer">
+        <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
+      </footer>
     </div>
   }
 </div>

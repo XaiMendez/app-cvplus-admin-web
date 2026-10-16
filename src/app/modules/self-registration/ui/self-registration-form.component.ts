@@ -8,7 +8,6 @@ import { firstValueFrom } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
@@ -28,7 +27,6 @@ type FormState = 'idle' | 'searching' | 'found' | 'submitting' | 'success' | 'er
     ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-    CardModule,
     MessageModule,
     ProgressSpinnerModule
   ],

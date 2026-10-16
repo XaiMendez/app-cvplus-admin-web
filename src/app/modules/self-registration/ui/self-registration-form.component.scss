@@ -1,589 +1,80 @@
+/* Formulario público SUMÁS — pensado primero para celular (mockup de 3 pantallas).
+   Colores medidos sobre la captura del mockup: confirmar con los tokens finales de diseño. */
 .self-registration-page {
-  min-height: calc(100vh - 80px);
-  background-color: var(--surface-ground);
-  padding: 2rem 1rem;
+  --sumas-blue: #3d9cc2;      /* botón activo y banda de éxito */
+  --sumas-blue-pale: #9ed8e4; /* botón deshabilitado */
+  --sumas-link: #17819f;
+  --sumas-ink: #1f2a30;
+  --sumas-muted: #5b6770;
+  --sumas-bg: #f1f5f8;        /* fondo de la pantalla 1 */
+  --sumas-field-bg: #f0f7fb;  /* tarjetas de campos (pantalla 2) */
+  --sumas-line: #e3e9ee;
+  --sumas-mango: #ffc629;
+
+  min-height: 100vh;
+  background: #e8ecef;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
+  color: var(--sumas-ink);
+  -webkit-text-size-adjust: 100%;
 }
 
-.page-content-centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 120px);
-}
-
-.page-content {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.page-badge {
-  display: inline-block;
-  background: var(--primary-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(10, 162, 192, 0.2);
-
-  &.success-badge {
-    background: var(--success-color);
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
-  }
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 2rem;
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--surface-900);
-    margin-top: 1rem;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--surface-600);
-  }
-}
-
-.subtitle-main {
-  font-size: 1.125rem;
-  color: var(--surface-600);
-  line-height: 1.6;
-}
-
-.search-section {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.visual-header {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2.5rem;
-  height: 100px;
-  align-items: center;
-  position: relative;
-}
-
-.header-accent {
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, #089db3 100%);
-  border-radius: 50%;
-  position: relative;
-  box-shadow: 0 8px 32px rgba(10, 162, 192, 0.2);
-  animation: float 3s ease-in-out infinite, scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30px;
-    height: 30px;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 50%;
-  }
-
-  &.header-accent-secondary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #0a96b8 100%);
-    width: 90px;
-    height: 90px;
-  }
-
-  &.header-accent-success {
-    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
-    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes scaleIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.benefits-list {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+/* Columna de celular centrada; en pantallas grandes queda como una tarjeta. */
+.shell {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #fff;
+  padding-bottom: env(safe-area-inset-bottom);
+
+  &--tinted .shell-body { background: var(--sumas-bg); }
+  &--center { justify-content: center; align-items: center; }
 }
 
-.benefit-item {
+@media (min-width: 560px) {
+  .self-registration-page { padding: 1.5rem 0; }
+  .shell { min-height: calc(100vh - 3rem); border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); }
+}
+
+.shell-body {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  align-items: flex-start;
-
-  .benefit-icon {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    background: var(--primary-color);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    margin-top: 2px;
-    box-shadow: 0 2px 8px rgba(10, 162, 192, 0.2);
-  }
-
-  div {
-    flex: 1;
-
-    strong {
-      display: block;
-      color: var(--surface-900);
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-    }
-
-    span {
-      display: block;
-      color: var(--surface-600);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-  }
+  padding: 1.25rem 1.25rem 1.5rem;
 }
 
-.instructive-text {
-  text-align: center;
-  color: var(--surface-700);
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-}
-
-.search-card,
-.client-card {
-  ::ng-deep {
-    .p-card {
-      border-radius: 14px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-      transition: all 0.3s ease;
-
-      &:hover {
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      }
-    }
-
-    .p-card-body {
-      padding: 2rem;
-    }
-  }
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-
-  label {
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: var(--surface-900);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-
-    .required {
-      color: #ef4444;
-      margin-left: 0.25rem;
-    }
-  }
-
-  input {
-    padding: 0.875rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-
-    &:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      outline: none;
-    }
-
-    &::placeholder {
-      color: var(--surface-600);
-    }
-  }
-
-  .error {
-    color: #ef4444;
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
-  }
-}
-
-
-.client-info-grid {
-  display: grid;
-  /* Nombre y correo ocupan todo el ancho; teléfono y DUI van lado a lado. */
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 1rem;
-}
-
-.info-item--wide {
-  grid-column: 1 / -1;
-}
-
-.info-item input {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-width: 0;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #f0f9ff 0%, #f3e8ff 100%);
-  border-radius: 8px;
-  border-left: 4px solid var(--primary-color);
-
-  .info-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--surface-600);
-    letter-spacing: 0.5px;
-  }
-
-  .info-value {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--surface-900);
-    word-break: break-word;
-  }
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1rem;
-
-  p {
-    margin: 0;
-    color: var(--surface-600);
-    font-size: 0.95rem;
-  }
-}
-
-.success-section {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.success-card {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-
-  ::ng-deep .p-card {
-    border-radius: 12px;
-    border: 1px solid #d1fae5;
-    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
-    padding: 2rem;
-  }
-}
-
-.success-icon-large {
-  text-align: center;
-  margin-bottom: 1.5rem;
-
-  i {
-    font-size: 4rem;
-    color: var(--success-color);
-    animation: bounce 0.6s ease-out;
-  }
-}
-
-.success-body {
-  text-align: center;
-  color: var(--surface-700);
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  padding: 1.5rem 0;
-
-  strong {
-    color: var(--surface-900);
-    font-weight: 700;
-  }
-}
-
-.help-section {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-left: 4px solid var(--info-color);
-
-  .help-title {
-    font-weight: 700;
-    color: var(--surface-900);
-    margin-bottom: 1rem;
-    display: block;
-  }
-
-  .help-item {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.95rem;
-    color: var(--surface-700);
-    line-height: 1.5;
-
-    i {
-      color: var(--info-color);
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    strong {
-      color: var(--surface-900);
-    }
-  }
-}
-
-.error-alert {
-  border-left: 4px solid var(--danger-color);
-  border-radius: 8px;
-}
-
-.success-content {
-  text-align: center;
-  padding: 2rem 0;
-
-  .success-icon {
-    font-size: 4rem;
-    color: #10b981;
-    margin-bottom: 1rem;
-    animation: bounce 0.6s ease-out;
-  }
-
-  h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #059669;
-    margin-bottom: 0.75rem;
-  }
-
-  .success-message {
-    font-size: 1rem;
-    color: var(--surface-700);
-    margin: 0 0 1rem 0;
-  }
-}
-
-@keyframes bounce {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .self-registration-page {
-    padding: 1rem;
-  }
-
-  .section-header {
-    margin-bottom: 1.5rem;
-
-    h1 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 0.9rem;
-    }
-  }
-
-  .client-info-grid {
-    gap: 1rem;
-  }
-
-  .info-item {
-    padding: 1rem;
-  }
-
-  .action-buttons {
-    flex-direction: column;
-    gap: 0.75rem;
-
-    ::ng-deep .p-button {
-      width: 100%;
-      min-width: unset;
-    }
-  }
-
-  .search-card,
-  .client-card {
-    ::ng-deep .p-card-body {
-      padding: 1.5rem;
-    }
-  }
-}
-
-.field-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.field-error {
-  display: block;
-  color: #b3261e;
-  font-size: 0.8125rem;
-  margin-top: 0.25rem;
-  min-height: 1em;
-}
-
-.support-link {
-  margin: 0 0 1rem;
-  font-size: 0.9rem;
-}
-
-.consent-group {
-  margin-top: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  .consent-item {
-    display: flex;
-    gap: 0.625rem;
-    align-items: flex-start;
-    font-size: 0.8125rem;
-    line-height: 1.4;
-
-    label { cursor: pointer; }
-  }
-
-  /* Casilla nativa: no depende de ningún tema de PrimeNG. */
-  .consent-box {
-    flex: 0 0 auto;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin: 0.1rem 0 0;
-    cursor: pointer;
-    accent-color: var(--primary-dark);
-  }
-}
-
-/* ===== Marca SUMÁS ===== */
-.self-registration-page {
-  --sumas-teal: #00abc8; /* Tiffany Blue */
-  --sumas-celadon: #0083ad; /* Celadon Blue */
-  --sumas-mango: #ffc629; /* Ripe Mango */
-  --sumas-onyx: #373a36; /* Onyx */
-  --sumas-teal-dark: #0083ad; /* Celadon Blue exacto del manual (contraste con blanco ~4,3:1) */
-  --sumas-cream: #fff3d1;
-  --primary-color: var(--sumas-teal-dark);
-  --primary-dark: #006a8c;
-  background-color: #f2f4f6;
-  font-family: 'Montserrat', sans-serif;
-  color: var(--sumas-onyx);
-
-  h1, .card-title {
-    font-family: 'Bebas Neue', 'Montserrat', sans-serif;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-  }
-
-  h1 { font-size: 2.25rem; line-height: 1.1; color: var(--sumas-celadon); }
-  .card-title { font-size: 1.5rem; }
-}
-
+/* ===== Encabezado y pie: franjas blancas ===== */
 .brand-header {
+  background: #fff;
   text-align: center;
-  margin-bottom: 1.5rem;
+  padding: calc(1.25rem + env(safe-area-inset-top)) 1.25rem 1rem;
 
   .logo-sumas {
     display: block;
     width: 230px;
-    max-width: 72%;
+    max-width: 70%;
     height: auto;
     margin: 0 auto;
   }
 }
 
+.brand-tagline {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sumas-link);
+}
+
 .brand-footer {
+  background: #fff;
+  border-top: 1px solid var(--sumas-line);
+  padding: 1.25rem;
   text-align: center;
-  margin-top: 2rem;
 
   .logo-cv {
     display: block;
@@ -594,134 +85,221 @@
   }
 }
 
-.page-content.narrow { max-width: 600px; }
-
-.card-title {
-  margin: 0 0 1rem;
-  font-size: 1.0625rem;
-  font-weight: 700;
+/* ===== Tarjetas ===== */
+.card {
+  background: #fff;
+  border: 1px solid var(--sumas-line);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.benefits-card { display: block; margin-bottom: 1rem; }
+.card-title {
+  display: block;
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--sumas-ink);
+
+  &--sm { margin-bottom: 0.25rem; }
+}
+
+/* ===== Beneficios ===== */
+.benefits-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.benefit-item {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+
+  div { flex: 1; min-width: 0; }
+
+  strong {
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--sumas-ink);
+  }
+
+  span {
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--sumas-muted);
+  }
+}
 
 .benefit-ico {
-  flex: 0 0 52px;
-  width: 52px;
-  height: 52px;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  img {
-    display: block;
-    width: 48px;
-    height: 48px;
-    object-fit: contain;
-  }
+  img { display: block; width: 28px; height: 28px; object-fit: contain; }
+
+  &--star  { background: #e1f6fb; }
+  &--gift  { background: #fff3d1; }
+  &--phone { background: #eaf4ee; }
 }
 
-.hint {
-  margin: 0 0 0.75rem;
-  font-size: 0.8125rem;
-  color: var(--surface-600);
-}
+/* ===== Campos ===== */
+.hint { margin: 0 0 0.875rem; font-size: 0.9375rem; color: var(--sumas-muted); }
 
 .example {
   display: block;
   margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--surface-600);
+  font-size: 0.8125rem;
+  color: var(--sumas-muted);
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #b3261e;
+
+  /* Sin mensaje no ocupa espacio (antes dejaba un hueco entre el texto de ayuda y el botón). */
+  &:empty { display: none; }
+}
+
+/* 16px mínimo: evita el zoom automático de iPhone al enfocar. */
+.field-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--sumas-ink);
+  background: #fff;
+  border: 1px solid #cfdbe3;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &::placeholder { color: #9aa7b0; }
+  &:focus { border-color: var(--sumas-blue); box-shadow: 0 0 0 3px rgba(61, 156, 194, 0.18); }
+
+  &--readonly {
+    display: flex;
+    align-items: center;
+    background: #f1f3f5;
+    color: var(--sumas-muted);
+    border-color: #e0e5e9;
+  }
 }
 
 .dui-input {
+  border: 2px solid var(--sumas-blue);
   font-size: 1.0625rem;
   letter-spacing: 0.04em;
-  border: 2px solid var(--sumas-teal) !important;
 }
 
-.name-accent {
-  color: var(--sumas-teal-dark);
-  text-transform: uppercase;
-}
-
-.success-hero {
-  background: var(--sumas-teal);
-  color: #fff;
-  color: #fff;
-  text-align: center;
-  padding: 1.75rem 1rem;
-  border-radius: 12px;
-  margin-bottom: 1.25rem;
-
-  h1 { margin: 0 0 0.25rem; font-size: 2rem; text-transform: uppercase; color: #fff; }
-  p { margin: 0; font-weight: 500; }
-
-  .success-check {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: #fff;
-    color: var(--sumas-teal-dark);
-    margin: 0 auto 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.75rem;
-  }
-}
-
-.gift {
-  background: var(--sumas-mango);
-  color: var(--sumas-onyx);
-  border-radius: 12px;
-  padding: 0.875rem 1rem;
+/* Pantalla 2: un campo por fila, en tarjeta celeste con borde izquierdo */
+.info-item {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  font-weight: 700;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+  background: var(--sumas-field-bg);
+  border-left: 4px solid var(--sumas-blue);
+  border-radius: 10px;
 
-  img {
-    flex: 0 0 auto;
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-  }
-}
-
-.steps {
-  list-style: none;
-  margin: 0 0 1.25rem;
-  padding: 0;
-
-  li { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.75rem; }
-
-  .n {
-    flex: 0 0 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--sumas-teal-dark);
-    color: #fff;
-    font-size: 0.8125rem;
+  .info-label {
+    font-size: 0.75rem;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sumas-ink);
   }
 }
 
-:host ::ng-deep .p-button:not(.p-button-text) {
-  /* Texto blanco sobre --primary-dark (#006a8c): contraste ~6:1 (WCAG AA). Con #0083ad quedaba en ~4,3:1. */
-  background: var(--primary-dark) !important;
-  border-color: var(--primary-dark) !important;
+.section-header {
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--sumas-ink);
+  }
+  .name-accent { color: var(--sumas-link); text-transform: uppercase; }
+  .subtitle-main { margin: 0; font-size: 0.9375rem; line-height: 1.55; color: var(--sumas-muted); }
+}
+
+/* ===== Casillas de consentimiento (nativas: no hay tema de PrimeNG) ===== */
+.consent-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0;
+
+  .consent-item {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--sumas-muted);
+
+    label { cursor: pointer; }
+  }
+
+  .consent-box {
+    flex: 0 0 auto;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.1rem 0 0;
+    cursor: pointer;
+    accent-color: var(--sumas-link);
+  }
+}
+
+/* ===== Botones ===== */
+.btn-wrap { display: block; margin-top: 1.25rem; }
+
+:host ::ng-deep .btn-wrap .p-button,
+:host ::ng-deep .btn-main {
+  width: 100%;
+  height: 52px;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  background: var(--sumas-blue) !important;
+  border: 0 !important;
+  color: #fff !important;
   box-shadow: none !important;
 }
 
-.captcha-host {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  min-height: 65px;
+:host ::ng-deep .btn-wrap .p-button:disabled,
+:host ::ng-deep .btn-wrap .p-button[disabled] {
+  background: var(--sumas-blue-pale) !important;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.link-btn {
+  display: block;
+  margin: 1rem auto 0;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--sumas-link);
+  background: none;
+  border: 0;
+  cursor: pointer;
 }
 
 .legal {
@@ -729,66 +307,100 @@
   font-size: 0.8125rem;
   line-height: 1.5;
   text-align: center;
-  color: var(--surface-600);
+  color: var(--sumas-muted);
 
-  a {
-    color: var(--sumas-teal-dark);
-    font-weight: 600;
-    text-decoration: underline;
-  }
+  a { color: var(--sumas-link); font-weight: 600; text-decoration: underline; }
 }
 
+.captcha-host { display: flex; justify-content: center; margin-top: 1rem; min-height: 65px; }
 
-/* ===== Tarjetas uniformes =====
-   No hay tema de PrimeNG: <p-card> es un elemento en línea y sin fondo, por eso cada tarjeta tenía
-   un ancho distinto y el título quedaba fuera de la caja blanca. Aquí se define su caja una sola vez. */
-.benefits-card,
-.search-card,
-.client-card,
-.success-card {
-  display: block;
-  width: 100%;
-}
+.support-link { margin: 0 0 1rem; font-size: 0.9rem; }
+.error-alert { border-radius: 8px; }
 
-.benefits-card,
-.search-card,
-.client-card {
-  ::ng-deep .p-card {
-    background: #fff;
-    border: 1px solid var(--border-color, #e5e7eb);
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-
-  ::ng-deep .p-card-body {
-    padding: 1.5rem;
-  }
-}
-
-/* La lista de beneficios ya vive dentro de la tarjeta: sin caja propia ni márgenes extra. */
-.benefits-list {
-  background: none;
-  padding: 0;
-  margin: 0;
-  box-shadow: none;
-  border-radius: 0;
-  gap: 1.25rem;
-}
-
-/* Pantalla de búsqueda: logo, beneficios y búsqueda con el mismo ancho y el mismo espacio entre sí. */
-.search-section {
+.loading-state {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
+  padding: 2rem;
+  text-align: center;
 
-  .brand-header { margin-bottom: 0.5rem; }
-  .benefits-card { margin-bottom: 0; }
-  .brand-footer { margin-top: 0.5rem; }
+  p { margin: 0; color: var(--sumas-muted); font-size: 0.95rem; }
 }
 
-/* Celulares angostos: un campo por fila. */
-@media (max-width: 480px) {
-  .client-info-grid {
-    grid-template-columns: minmax(0, 1fr);
+/* ===== Pantalla 3: confirmación ===== */
+.success-hero {
+  background: var(--sumas-blue);
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1.25rem;
+
+  .success-check {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--sumas-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
   }
+
+  h1 { margin: 0 0 0.25rem; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; color: #fff; }
+  p  { margin: 0; font-weight: 500; }
+}
+
+.gift {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: #fff3d1;
+  border-radius: 12px;
+  font-weight: 600;
+
+  img { flex: 0 0 auto; width: 32px; height: 32px; object-fit: contain; }
+}
+
+.success-body { margin: 0; font-size: 1rem; line-height: 1.6; strong { font-weight: 700; word-break: break-word; } }
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+
+  li { display: flex; gap: 0.75rem; align-items: flex-start; line-height: 1.5; min-width: 0; }
+  li span:last-child { min-width: 0; word-break: break-word; }
+
+  .n {
+    flex: 0 0 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--sumas-blue);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.help-section {
+  padding: 1rem;
+  background: #f3f5f7;
+  border-left: 4px solid var(--sumas-blue);
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--sumas-muted);
+
+  p { margin: 0 0 0.5rem; &:last-child { margin: 0; } }
+  .help-title { font-weight: 700; color: var(--sumas-ink); }
+  a { color: var(--sumas-link); font-weight: 600; }
 }

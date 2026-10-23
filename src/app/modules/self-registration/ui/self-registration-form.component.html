@@ -4,8 +4,7 @@
   @if (state() === 'idle' || state() === 'error') {
     <div class="shell shell--tinted">
       <header class="brand-header">
-        <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
-        <p class="brand-tagline">SUMÁS · Tu programa de lealtad</p>
+        <img class="logo-sumas" src="img/sumas-logo-lema.svg" alt="SUMÁS, tu programa de lealtad" />
       </header>
 
       <main class="shell-body">
@@ -13,21 +12,21 @@
           <h2 class="card-title">¿Qué ganas con SUMÁS?</h2>
           <div class="benefits-list">
             <div class="benefit-item">
-              <span class="benefit-ico benefit-ico--star" aria-hidden="true"><img src="img/icon-star.png" alt="" /></span>
+              <span class="benefit-ico benefit-ico--star" aria-hidden="true"><img src="img/icon-star.svg" alt="" /></span>
               <div>
                 <strong>Acumula puntos en cada compra</strong>
                 <span>1 punto por cada $1 que pagas en nuestras sucursales.</span>
               </div>
             </div>
             <div class="benefit-item">
-              <span class="benefit-ico benefit-ico--gift" aria-hidden="true"><img src="img/icon-gift.png" alt="" /></span>
+              <span class="benefit-ico benefit-ico--gift" aria-hidden="true"><img src="img/icon-gift.svg" alt="" /></span>
               <div>
                 <strong>Desbloquea descuentos</strong>
                 <span>Hasta 25% (máximo $150 por compra) en tu próxima compra.</span>
               </div>
             </div>
             <div class="benefit-item">
-              <span class="benefit-ico benefit-ico--phone" aria-hidden="true"><img src="img/icon-mobile.png" alt="" /></span>
+              <span class="benefit-ico benefit-ico--phone" aria-hidden="true"><img src="img/icon-mobile.svg" alt="" /></span>
               <div>
                 <strong>Sin costo y sin app</strong>
                 <span>Es gratis y guardas tu Pase en Apple Wallet o Google Wallet.</span>
@@ -87,7 +86,7 @@
       </main>
 
       <footer class="brand-footer">
-        <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
+        <img class="logo-cv" src="img/opticas-cv-logo.svg" alt="Ópticas CV+" />
       </footer>
     </div>
   }
@@ -96,7 +95,7 @@
   @if (state() === 'searching') {
     <div class="shell shell--center">
       <div class="loading-state" role="status">
-        <img class="loading-logo" src="img/sumas-logo.png" alt="" />
+        <img class="loading-logo" src="img/sumas-logo.svg" alt="" />
         <p>Buscando tu DUI...</p>
       </div>
     </div>
@@ -106,7 +105,7 @@
   @if (state() === 'found') {
     <div class="shell">
       <header class="brand-header">
-        <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
+        <img class="logo-sumas" src="img/sumas-logo.svg" alt="SUMÁS, tu programa de lealtad" />
       </header>
 
       <main class="shell-body">
@@ -169,7 +168,7 @@
       </main>
 
       <footer class="brand-footer">
-        <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
+        <img class="logo-cv" src="img/opticas-cv-logo.svg" alt="Ópticas CV+" />
       </footer>
     </div>
   }
@@ -178,7 +177,7 @@
   @if (state() === 'submitting') {
     <div class="shell shell--center">
       <div class="loading-state" role="status">
-        <img class="loading-logo" src="img/sumas-logo.png" alt="" />
+        <img class="loading-logo" src="img/sumas-logo.svg" alt="" />
         <p>Preparando tu Pase SUMÁS...</p>
       </div>
     </div>
@@ -188,7 +187,7 @@
   @if (state() === 'success') {
     <div class="shell">
       <header class="brand-header">
-        <img class="logo-sumas" src="img/sumas-logo.png" alt="SUMÁS, tu programa de lealtad" />
+        <img class="logo-sumas" src="img/sumas-logo.svg" alt="SUMÁS, tu programa de lealtad" />
       </header>
 
       <section class="success-hero">
@@ -200,7 +199,7 @@
       </section>
 
       <main class="shell-body">
-        <div class="gift"><img src="img/icon-gift.png" alt="" /><span>Tu Pase SUMÁS ya está listo</span></div>
+        <div class="gift"><img src="img/icon-gift.svg" alt="" /><span>Tu Pase SUMÁS ya está listo</span></div>
 
         <p class="success-body">
           Te enviamos tu pase digital a <strong>{{ userEmail() }}</strong>.
@@ -230,7 +229,7 @@
       </main>
 
       <footer class="brand-footer">
-        <img class="logo-cv" src="img/opticas-cv-logo.png" alt="Ópticas CV+" />
+        <img class="logo-cv" src="img/opticas-cv-logo.svg" alt="Ópticas CV+" />
       </footer>
     </div>
   }

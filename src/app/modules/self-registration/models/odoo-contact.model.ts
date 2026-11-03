@@ -14,6 +14,8 @@ export interface EnrollPayload {
   phone: string;
   accepted_terms: boolean;
   marketing_consent: boolean;
+  /** Sucursal de origen (?warehouse= en la URL). Opcional. */
+  warehouse?: string;
 }
 
 export interface ApiError {

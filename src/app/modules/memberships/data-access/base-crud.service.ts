@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError, shareReplay } from 'rxjs';
+import { config } from '../../../../config';
 
 @Injectable({ providedIn: 'root' })
 export abstract class BaseCrudService<T> {
   abstract endpoint: string;
-  protected apiUrl = 'https://cvplus-passes-admin-production.up.railway.app';
+  protected apiUrl = config.apiUrl;
 
   constructor(protected http: HttpClient) {}
 

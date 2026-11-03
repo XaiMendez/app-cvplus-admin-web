@@ -4,6 +4,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +16,7 @@ import { SelfRegistrationService } from '../data-access/self-registration.servic
 import { ApiError, LookupResult } from '../models/odoo-contact.model';
 import { duiValidator, formatDui } from '../utils/dui.util';
 import { renderTurnstile } from '../utils/turnstile.util';
+import { parseWarehouse } from '../utils/warehouse.util';
 import { config } from '../../../../config';
 
 type FormState = 'idle' | 'searching' | 'found' | 'submitting' | 'success' | 'error';
@@ -37,6 +39,10 @@ type FormState = 'idle' | 'searching' | 'found' | 'submitting' | 'success' | 'er
 export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private service = inject(SelfRegistrationService);
+  private route = inject(ActivatedRoute);
+
+  /** Sucursal de origen: llega en la URL (?warehouse=119) y se guarda junto con la membresía. */
+  private warehouse?: string;
 
   readonly state = signal<FormState>('idle');
   readonly lookup = signal<LookupResult | null>(null);
@@ -70,6 +76,7 @@ export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.warehouse = parseWarehouse(this.route.snapshot.queryParamMap.get('warehouse'));
     this.searchForm = this.fb.group({
       dui: ['', [Validators.required, duiValidator]]
     });
@@ -161,7 +168,8 @@ export class SelfRegistrationFormComponent implements OnInit, OnDestroy {
           email,
           phone: value.phone,
           accepted_terms: !!value.accepted_terms,
-          marketing_consent: !!value.marketing_consent
+          marketing_consent: !!value.marketing_consent,
+          ...(this.warehouse ? { warehouse: this.warehouse } : {})
         })
       );
 

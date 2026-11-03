@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Membership, Customer, Tier } from '../models/membership.model';
 import { BaseCrudService } from '../../shared/services/base-crud.service';
+import { config } from '../../../../config';
 
 @Injectable({ providedIn: 'root' })
 export class MembershipsService extends BaseCrudService<Membership> {
-  protected override apiUrl = 'https://cvplus-passes-admin-production.up.railway.app';
+  protected override apiUrl = config.apiUrl;
 
   constructor(http: HttpClient) {
     super(http, 'memberships');

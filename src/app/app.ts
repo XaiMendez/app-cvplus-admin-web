@@ -64,7 +64,8 @@ export class App implements OnInit {
   }
 
   isPublicPage(): boolean {
-    return this.router.url === '/login' || this.router.url === '/self-registration';
+    const path = this.router.url.split(/[?#]/)[0];
+    return path === '/' || path === '' || path === '/login' || path === '/self-registration';
   }
 
   getMenuLabel(label: string): string {
@@ -73,6 +74,6 @@ export class App implements OnInit {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/self-registration']);
+    this.router.navigate(['/']);
   }
 }

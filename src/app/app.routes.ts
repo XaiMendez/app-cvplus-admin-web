@@ -11,13 +11,13 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'self-registration', component: SelfRegistrationFormComponent },
+  { path: '', component: SelfRegistrationFormComponent, pathMatch: 'full' },
+  { path: 'self-registration', redirectTo: '', pathMatch: 'full' },
   { path: 'memberships', component: MembershipsListComponent, canActivate: [authGuard] },
   { path: 'memberships/new', component: MembershipsFormPageComponent, canActivate: [authGuard] },
   { path: 'memberships/:id/edit', component: MembershipsFormPageComponent, canActivate: [authGuard] },
   { path: 'customers', component: CustomersListComponent, canActivate: [authGuard] },
   { path: 'loyalty/accounts', component: LoyaltyAccountsListComponent, canActivate: [authGuard] },
   { path: 'loyalty/transactions/:customerId', component: LoyaltyTransactionsComponent, canActivate: [authGuard] },
-  { path: 'loyalty/rules', component: LoyaltyRulesComponent, canActivate: [authGuard] },
-  { path: '', redirectTo: 'self-registration', pathMatch: 'full' }
+  { path: 'loyalty/rules', component: LoyaltyRulesComponent, canActivate: [authGuard] }
 ];

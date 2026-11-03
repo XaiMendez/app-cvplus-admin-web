@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoyaltyAccount, LoyaltyTransaction, LoyaltyRules } from '../models/loyalty-account.model';
+import { config } from '../../../../config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoyaltyAccountsService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://cvplus-passes-admin-production.up.railway.app/api/loyalty';
+  private baseUrl = `${config.apiUrl}/api/loyalty`;
 
   getAccounts(): Observable<LoyaltyAccount[]> {
     return this.http.get<LoyaltyAccount[]>(`${this.baseUrl}/accounts`);

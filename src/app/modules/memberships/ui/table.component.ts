@@ -25,6 +25,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
             <tr>
               <th>ID ODOO</th>
               <th>Cliente</th>
+              <th>Warehouse</th>
               <th>Puntos</th>
               <th>Estado</th>
               <th>Creado</th>
@@ -35,6 +36,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
             <tr *ngFor="let item of paginatedData; trackBy: trackByFn" class="table-row">
               <td class="cell-id">{{ item.customer?.customer_id }}</td>
               <td class="cell-name">{{ item.customer?.display_name }}</td>
+              <td class="cell-warehouse">{{ item.warehouse || '—' }}</td>
               <td class="cell-number">{{ item.total_points }}</td>
               <td class="cell-status">
                 <nz-tag [nzColor]="getColor(item.status)">{{ item.status }}</nz-tag>
@@ -56,7 +58,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
               </td>
             </tr>
             <tr *ngIf="!paginatedData || paginatedData.length === 0" class="empty-row">
-              <td [attr.colspan]="6">
+              <td [attr.colspan]="7">
                 <div class="empty-state">
                   <i nz-icon nzType="inbox" nzTheme="outline" class="empty-icon"></i>
                   <p>Sin datos disponibles</p>
@@ -152,6 +154,13 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
       max-width: 300px;
       white-space: normal;
       word-wrap: break-word;
+    }
+
+    .cell-warehouse {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #595959;
+      text-align: center;
     }
 
     .cell-number {

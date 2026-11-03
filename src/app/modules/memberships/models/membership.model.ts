@@ -7,6 +7,8 @@ export interface Membership {
   end_date: string;
   status: 'CREADO' | 'ACTIVO' | 'INACTIVO';
   total_points: number;
+  /** Sucursal desde la que se abrió el formulario de autoafiliación (?warehouse=). */
+  warehouse?: string | null;
   created_at: string;
   updated_at: string;
   customer: Customer | null;

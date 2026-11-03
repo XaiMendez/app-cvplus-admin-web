@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
@@ -23,7 +23,7 @@ interface MenuItem {
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
+export class App {
   menuItems: MenuItem[] | undefined;
   isLoggedIn = false;
   protected readonly date = new Date();
@@ -31,10 +31,13 @@ export class App implements OnInit {
   constructor(
     public router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    // El menú se rearma cada vez que cambia la sesión (login/logout), no solo al cargar la app.
+    effect(() => this.buildMenu(this.authService.isLoggedIn()));
+  }
 
-  ngOnInit() {
-    this.isLoggedIn = this.authService.isLoggedIn();
+  private buildMenu(loggedIn: boolean) {
+    this.isLoggedIn = loggedIn;
 
     if (!this.isLoggedIn) {
       this.menuItems = [
